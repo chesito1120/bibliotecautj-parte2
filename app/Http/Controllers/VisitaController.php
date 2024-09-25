@@ -96,27 +96,28 @@ class VisitaController extends Controller
      */
     public function store(Request $request)
 {
-    // Valida los datos del formulario
+    // Validar los datos del formulario
     $validated = $request->validate([
         'matricula' => 'required|string',
         'servicio' => 'required|in:computo,acervo,prestamo',
     ]);
 
-    // Busca el usuario con la matrícula proporcionada
+    // Buscar el usuario con la matrícula proporcionada
     $usuario = DB::table('usuarios')->where('matricula', $validated['matricula'])->first();
 
+    // Si no se encuentra el usuario, redirigir a la vista de registro con una alerta
     if (!$usuario) {
-        return redirect()->back()->withErrors(['matricula' => 'Matrícula no encontrada.']);
+        return redirect()->route('usuarios.create')->with('alerta', 'Usuario no registrado, por favor complete el registro.');
     }
 
-    // Guarda la visita
+    // Guardar la visita
     DB::table('visitas')->insert([
         'usuario_id' => $usuario->id,
         'servicio' => $validated['servicio'],
         'fecha' => now(),
     ]);
 
-    return redirect()->route('visitas.create')->with('success', 'Visita registrada exitosamente.');
+    return redirect()->route('visitas.index')->with('success', 'Visita registrada exitosamente.');
 }
 
     /**
