@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VisitaController;
 use App\Http\Controllers\UsuariosController;
+use App\Models\Alumno;  
+use App\Models\Maestro;  
 
 // Rutas para el controlador de visitas
 Route::get('/visitas', [VisitaController::class, 'index'])->name('visitas.index');
@@ -16,3 +18,21 @@ Route::delete('/visitas/{id}', [VisitaController::class, 'destroy'])->name('visi
 // Rutas para el controlador de usuarios
 Route::get('/usuarios/create', [UsuariosController::class, 'create'])->name('usuarios.create');
 Route::post('/usuarios/store', [UsuariosController::class, 'store'])->name('usuarios.store');
+
+// Ruta para obtener datos del usuario por matrícula (alumno o maestro)
+Route::get('/visitas/usuario/{matricula}', function ($matricula) {
+    // Primero buscar en alumnos
+    $usuario = Alumno::where('matricula', $matricula)->first();
+    
+    if (!$usuario) {
+        // Si no se encuentra en alumnos, buscar en maestros (suponiendo que los maestros no tienen matrícula)
+        $usuario = Maestro::where('matricula', $matricula)->first();
+        
+        if (!$usuario) {
+            return response()->json(['error' => 'Usuario no encontrado'], 404);
+        }
+    }
+
+    // Retornar los datos del usuario (ya sea alumno o maestro)
+    return response()->json($usuario);
+});
