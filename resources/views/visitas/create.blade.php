@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,11 +50,6 @@
             background-color: #28a745;
             color: white;
         }
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-            margin-right: 10px;
-        }
         .btn:hover {
             opacity: 0.9;
         }
@@ -68,9 +63,8 @@
             background-color: #d4edda;
             color: #155724;
         }
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
+        #prestamoForm {
+            display: none;
         }
     </style>
 </head>
@@ -90,6 +84,7 @@
                 {{ session('error') }}
             </div>
         @endif
+
         <form action="{{ route('visitas.store') }}" method="post">
             @csrf
 
@@ -100,7 +95,7 @@
 
             <div class="form-group">
                 <label for="servicio">Servicio</label>
-                <select name="servicio" id="servicio" required>
+                <select name="servicio" id="servicio" onchange="togglePrestamoForm()" required>
                     <option value="" disabled selected>Seleccione un servicio</option>
                     <option value="computo" {{ old('servicio') == 'computo' ? 'selected' : '' }}>Computo</option>
                     <option value="acervo" {{ old('servicio') == 'acervo' ? 'selected' : '' }}>Acervo</option>
@@ -108,10 +103,127 @@
                 </select>
             </div>
 
+            <!-- Formulario adicional que aparece cuando se selecciona "Préstamo Externo" -->
+            <div id="prestamoForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="sexo">Sexo</label>
+                    <select name="sexo" id="sexo">
+                        <option value="masculino" {{ old('sexo') == 'masculino' ? 'selected' : '' }}>Masculino</option>
+                        <option value="femenino" {{ old('sexo') == 'femenino' ? 'selected' : '' }}>Femenino</option>
+                        <option value="otro" {{ old('sexo') == 'otro' ? 'selected' : '' }}>Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="grado">Grado y Grupo</label>
+                    <input type="text" name="grado" id="grado" value="{{ old('grado') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_prestamo">Fecha de Préstamo</label>
+                    <input type="date" name="fecha_prestamo" id="fecha_prestamo" value="{{ old('fecha_prestamo') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo_usuario">Tipo de Usuario</label>
+                    <select name="tipo_usuario" id="tipo_usuario">
+                        <option value="alumno" {{ old('tipo_usuario') == 'alumno' ? 'selected' : '' }}>Alumno</option>
+                        <option value="maestro" {{ old('tipo_usuario') == 'maestro' ? 'selected' : '' }}>Maestro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="carrera">Carrera</label>
+                    <select name="carrera" id="carrera">
+                        <option value="TSU" {{ old('carrera') == 'TSU' ? 'selected' : '' }}>TSU</option>
+                        <option value="Ingeniería" {{ old('carrera') == 'Ingeniería' ? 'selected' : '' }}>Ingeniería</option>
+                        <option value="Licenciatura" {{ old('carrera') == 'Licenciatura' ? 'selected' : '' }}>Licenciatura</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="titulo_libro">Título del Libro</label>
+                    <input type="text" name="titulo_libro" id="titulo_libro" value="{{ old('titulo_libro') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="autor">Autor(a)</label>
+                    <input type="text" name="autor" id="autor" value="{{ old('autor') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="no_clasificacion">No. de Clasificación</label>
+                    <input type="text" name="no_clasificacion" id="no_clasificacion" value="{{ old('no_clasificacion') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="renovacion">¿Renovación?</label>
+                    <select name="renovacion" id="renovacion" onchange="toggleRenovacionFecha()">
+                        <option value="no" {{ old('renovacion') == 'no' ? 'selected' : '' }}>No</option>
+                        <option value="si" {{ old('renovacion') == 'si' ? 'selected' : '' }}>Sí</option>
+                    </select>
+                </div>
+
+                <div id="fechaRenovacion" class="form-group" style="display: none;">
+                    <label for="fecha_renovacion">Fecha de Renovación</label>
+                    <input type="date" name="fecha_renovacion" id="fecha_renovacion" value="{{ old('fecha_renovacion') }}">
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-success">Registrar</button>
         </form>
     </div>
-    
-    <a href="{{ route('visitas.index') }}" class="btn btn-metricas">Ver Métricas</a>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function togglePrestamoForm() {
+            var servicio = document.getElementById('servicio').value;
+            var prestamoForm = document.getElementById('prestamoForm');
+            if (servicio === 'prestamo') {
+                prestamoForm.style.display = 'block';
+            } else {
+                prestamoForm.style.display = 'none';
+            }
+        }
+
+        function toggleRenovacionFecha() {
+            var renovacion = document.getElementById('renovacion').value;
+            var fechaRenovacion = document.getElementById('fechaRenovacion');
+            if (renovacion === 'si') {
+                fechaRenovacion.style.display = 'block';
+            } else {
+                fechaRenovacion.style.display = 'none';
+            }
+        }
+
+        // AJAX para obtener los datos de la matrícula
+        $('#matricula').on('input', function() {
+            var matricula = $(this).val();
+            if (matricula.length > 0) {
+                $.ajax({
+                    url: '/visitas/usuario/' + matricula,
+                    method: 'GET',
+                    success: function(response) {
+                        if (response) {
+                            $('#nombre').val(response.nombre);
+                            $('#sexo').val(response.sexo);
+                            $('#grado').val(response.grado);
+                            $('#tipo_usuario').val(response.tipo_usuario);
+                            $('#carrera').val(response.carrera);
+                        }
+                    }
+                });
+            }
+        });
+
+        // Ejecutar la función al cargar la página si ya hay un servicio seleccionado
+        togglePrestamoForm();
+    </script>
+
 </body>
 </html>
