@@ -1,64 +1,30 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Imports\UsuariosImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UsuariosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return view('usuarios.index'); // Vista para subir el CSV
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function import(Request $request) {
+        // Validar el archivo CSV
+        $request->validate([
+            'file' => 'required|mimes:csv,txt|max:2048', // Limitar el tamaño del archivo
+        ]);
+    
+        try {
+            // Importar los datos del CSV
+            Excel::import(new UsuariosImport, $request->file('file'));
+            return redirect()->back()->with('success', 'Alumnos importados correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
+        }
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    
 }

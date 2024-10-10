@@ -16,3 +16,7 @@ Route::delete('/visitas/{id}', [VisitaController::class, 'destroy'])->name('visi
 // Rutas para el controlador de usuarios
 Route::get('/usuarios/create', [UsuariosController::class, 'create'])->name('usuarios.create');
 Route::post('/usuarios/store', [UsuariosController::class, 'store'])->name('usuarios.store');
+
+//Rutas para subir csv de usuarios 
+Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios.index');
+Route::post('/usuarios/import', [UsuariosController::class, 'import'])->name('usuarios.import');
