@@ -9,9 +9,8 @@ class Usuarios extends Model
 {
     use HasFactory;
 
-    protected $table = 'usuarios'; // Asegúrate de que este nombre coincide con el de tu tabla
+    protected $table = 'usuarios';
 
-    // Define los campos que se pueden rellenar
     protected $fillable = [
         'matricula',
         'nombre',

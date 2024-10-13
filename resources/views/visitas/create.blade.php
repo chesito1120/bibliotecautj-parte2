@@ -224,6 +224,6 @@
         // Ejecutar la función al cargar la página si ya hay un servicio seleccionado
         togglePrestamoForm();
     </script>
-
+    <a href="{{ route('visitas.index') }}" class="btn btn-metricas">Ver Métricas</a>
 </body>
 </html>
