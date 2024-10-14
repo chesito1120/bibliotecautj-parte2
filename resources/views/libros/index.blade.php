@@ -72,12 +72,81 @@
         .btn:hover {
             opacity: 0.9;
         }
+        /* Estilos del buscador */
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-container input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .search-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-container button:hover {
+            opacity: 0.9;
+        }
+
+        /* Estilos para la paginación */
+        .pagination {
+            display: flex;
+            justify-content: center; /* Centrar los elementos */
+            align-items: center; /* Alinear verticalmente */
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .pagination button, .pagination a {
+            padding: 10px 15px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 16px;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0 5px; /* Espaciado entre los botones */
+        }
+
+        .pagination button:hover, .pagination a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .results-info {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h2>Lista de Libros</h2>
+
+        <!-- Formulario de búsqueda -->
+        <div class="search-container">
+            <form action="{{ route('libros.index') }}" method="GET">
+                <input type="text" name="search" placeholder="Buscar por título o autor..." value="{{ request('search') }}">
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
+
+        <!-- Tabla de libros -->
         <table>
             <thead>
                 <tr>
@@ -88,7 +157,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($libros as $libro)
+                @forelse($libros as $libro)
                     <tr>
                         <td>{{ $libro->id }}</td>
                         <td>{{ $libro->titulo }}</td>
@@ -103,10 +172,44 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="4" style="text-align:center;">No se encontraron libros</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
-        <a href="{{ route('libros.create') }}" class="btn btn-success">Agregar Nuevo Libro</a>
+
+        <!-- Mensaje de resultados -->
+        <div class="results-info">
+            Mostrando {{ $libros->firstItem() }} a {{ $libros->lastItem() }} de {{ $libros->total() }} resultados
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination-container">
+            <ul class="pagination">
+                <li>
+                    <button class="prev" {{ $libros->onFirstPage() ? 'disabled' : '' }} onclick="window.location='{{ $libros->previousPageUrl() }}'">Anterior</button>
+                </li>
+
+                <!-- Números de página -->
+                @for ($i = 1; $i <= $libros->lastPage(); $i++)
+                    @if ($i >= $libros->currentPage() - 4 && $i <= $libros->currentPage() + 4) 
+                        <li>
+                            <button class="{{ $i == $libros->currentPage() ? 'active' : '' }}" onclick="window.location='{{ $libros->url($i) }}'">{{ $i }}</button>
+                        </li>
+                    @endif
+                @endfor
+
+                <li>
+                    <button class="next" {{ $libros->hasMorePages() ? '' : 'disabled' }} onclick="window.location='{{ $libros->nextPageUrl() }}'">Siguiente</button>
+                </li>
+            </ul>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="{{ route('libros.create') }}" class="btn btn-success">Agregar Nuevo Libro</a>
+        </div>        
     </div>
 
 </body>

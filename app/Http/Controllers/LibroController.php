@@ -13,8 +13,7 @@ class LibroController extends Controller
         return view('libros.subir_libros');
     }
 
-    public function uploadCSV(Request $request)
-    {
+    public function uploadCSV(Request $request){
         // Validación del archivo CSV
         $request->validate([
             'file' => 'required|mimes:csv,txt|max:2048',
@@ -34,6 +33,12 @@ class LibroController extends Controller
                     continue;
                 }
 
+                // Verificar si el campo 'titulo' está vacío
+                if (empty($row[1])) {
+                    // Si el título está vacío, saltar esta fila
+                    continue;
+                }
+
                 // Guardar los datos del libro
                 $libroData = [
                     'clas_dewey' => $row[0],
@@ -49,20 +54,36 @@ class LibroController extends Controller
                     'fecha_ingreso' => $row[10],
                 ];
 
+                // Crear el registro del libro
                 Libro::create($libroData);
             }
             fclose($handle);
         }
 
-        return back()->with('success', 'Libros importados exitosamente');
+        return back()->with('success', 'Libros importados exitosamente.');
     }
 
-    public function index()
+
+    public function index(Request $request)
     {
-        // Obtener todos los libros
-        $libros = Libro::all();
+        // Recoge el valor del parámetro 'search' de la solicitud (si existe)
+        $search = $request->input('search');
+    
+        // Si hay un valor de búsqueda, se filtran los libros por título o autor
+        if ($search) {
+            $libros = Libro::where('titulo', 'like', "%{$search}%")
+                           ->orWhere('autor', 'like', "%{$search}%")
+                           ->paginate(20);
+        } else {
+            // Si no hay búsqueda, obtenemos todos los libros con paginación
+            $libros = Libro::paginate(20);
+        }
+    
+        // Retornar la vista con los libros paginados
         return view('libros.index', compact('libros'));
     }
+    
+
 
     public function create()
     {
