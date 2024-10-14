@@ -21,7 +21,7 @@ class CreateLibrosTable extends Migration
             $table->string('editorial');
             $table->string('edicion')->nullable();
             $table->string('area_conocimiento');
-            $table->integer('pag')->nullable();
+            $table->string('pag')->nullable();
             $table->string('isbn');
             $table->string('area_sumario')->nullable();
             $table->string('donacion_compra'); 
