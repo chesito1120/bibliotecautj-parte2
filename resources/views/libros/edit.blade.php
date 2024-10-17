@@ -102,6 +102,10 @@
             @csrf
             @method('PUT')
             <div class="form-group">
+                <label for="titulo">Clas. Dewey</label>
+                <input type="text" name="clas_dewey" id="clas_dewey" value="{{ $libro->clas_dewey }}" required>
+            </div>
+            <div class="form-group">
                 <label for="titulo">Título:</label>
                 <input type="text" name="titulo" id="titulo" value="{{ $libro->titulo }}" required>
             </div>

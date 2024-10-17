@@ -34,7 +34,7 @@ class LibroController extends Controller
                 }
 
                 // Verificar si el campo 'titulo' está vacío
-                if (empty($row[1])) {
+                if (empty($row[0]) || empty($row[1])) {
                     // Si el título está vacío, saltar esta fila
                     continue;
                 }
@@ -128,7 +128,7 @@ class LibroController extends Controller
 
     public function update(Request $request, Libro $libro)
     {
-        // Validar la solicitud
+        // Validar la solicitud con condición en la validación del ISBN
         $request->validate([
             'clas_dewey' => 'required|string',
             'titulo' => 'required|string',
@@ -137,17 +137,28 @@ class LibroController extends Controller
             'edicion' => 'nullable|string',
             'area_conocimiento' => 'required|string',
             'pag' => 'nullable|integer',
-            'isbn' => 'required|string|unique:libros,isbn,' . $libro->id,
+            'isbn' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) use ($libro) {
+                    // Solo validar si el ISBN ha cambiado
+                    if ($value !== $libro->isbn && Libro::where('isbn', $value)->exists()) {
+                        $fail('El ISBN ya está en uso.');
+                    }
+                },
+            ],
             'area_sumario' => 'nullable|string',
             'donacion_compra' => 'required|string',
             'fecha_ingreso' => 'required|string',
         ]);
-
+    
         // Actualizar el libro
         $libro->update($request->all());
-
+    
         return redirect()->route('libros.index')->with('success', 'Libro actualizado exitosamente.');
     }
+    
+
 
     public function destroy(Libro $libro)
     {

@@ -189,23 +189,33 @@
         <div class="pagination-container">
             <ul class="pagination">
                 <li>
-                    <button class="prev" {{ $libros->onFirstPage() ? 'disabled' : '' }} onclick="window.location='{{ $libros->previousPageUrl() }}'">Anterior</button>
+                    <button class="prev" {{ $libros->onFirstPage() ? 'disabled' : '' }} 
+                        onclick="window.location='{{ $libros->appends(['search' => request('search')])->previousPageUrl() }}'">
+                        Anterior
+                    </button>
                 </li>
 
                 <!-- Números de página -->
                 @for ($i = 1; $i <= $libros->lastPage(); $i++)
                     @if ($i >= $libros->currentPage() - 4 && $i <= $libros->currentPage() + 4) 
                         <li>
-                            <button class="{{ $i == $libros->currentPage() ? 'active' : '' }}" onclick="window.location='{{ $libros->url($i) }}'">{{ $i }}</button>
+                            <button class="{{ $i == $libros->currentPage() ? 'active' : '' }}" 
+                                onclick="window.location='{{ $libros->appends(['search' => request('search')])->url($i) }}'">
+                                {{ $i }}
+                            </button>
                         </li>
                     @endif
                 @endfor
 
                 <li>
-                    <button class="next" {{ $libros->hasMorePages() ? '' : 'disabled' }} onclick="window.location='{{ $libros->nextPageUrl() }}'">Siguiente</button>
+                    <button class="next" {{ $libros->hasMorePages() ? '' : 'disabled' }} 
+                        onclick="window.location='{{ $libros->appends(['search' => request('search')])->nextPageUrl() }}'">
+                        Siguiente
+                    </button>
                 </li>
             </ul>
         </div>
+
 
         <div style="text-align: center;">
             <a href="{{ route('libros.create') }}" class="btn btn-success">Agregar Nuevo Libro</a>
