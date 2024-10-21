@@ -41,8 +41,9 @@ return new class extends Migration
 
         // Actualizar la tabla de usuarios para referenciar a la tabla de carreras
         Schema::table('usuarios', function (Blueprint $table) {
-            $table->foreignId('carrera_id')->nullable()->constrained('carreras');
+            $table->foreignId('carrera_id')->nullable()->constrained('carreras')->onDelete('set null');
         });
+        
     }
 
     /**

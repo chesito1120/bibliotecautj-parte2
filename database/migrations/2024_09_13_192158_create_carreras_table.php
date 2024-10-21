@@ -9,13 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
+    public function up(){
+    if (!Schema::hasTable('carreras')) {
         Schema::create('carreras', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->string('nombre');
+            $table->string('nivel_educativo');
             $table->timestamps();
         });
     }
+}
 
     /**
      * Reverse the migrations.
