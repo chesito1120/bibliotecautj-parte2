@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuarios; // Cambia el nombre del modelo si es necesario
+use App\Imports\UsuariosImport;
+use App\Models\Usuarios; 
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
-class UsuarioController extends Controller
+class UsuariosController extends Controller
 {
+    // Método para mostrar el formulario de carga de CSV
     public function showUploadForm()
     {
-        // Cambia la referencia a la vista correcta
-        return view('usuarios.subir_usuarios');
+        return view('usuarios.index'); // Cambia la referencia a la vista correcta
     }
 
+    // Método para manejar la carga del archivo CSV
     public function uploadCSV(Request $request)
     {
         // Validación del archivo CSV
@@ -20,44 +23,14 @@ class UsuarioController extends Controller
             'file' => 'required|mimes:csv,txt|max:2048',
         ]);
 
-        // Cargar el archivo
-        $file = $request->file('file');
+        try {
+            // Importar el archivo CSV usando UsuariosImport
+            Excel::import(new UsuarioImport, $request->file('file'));
 
-        // Abrir el archivo y leer el contenido
-        $handle = fopen($file, 'r');
-        if ($handle) {
-            // Saltar la primera fila si es un encabezado
-            $firstRow = true;
-            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                if ($firstRow) {
-                    $firstRow = false;
-                    continue;
-                }
-
-                // Verificar si los campos requeridos están vacíos
-                if (empty($row[0]) || empty($row[1]) || empty($row[2])) {
-                    // Si faltan campos requeridos, saltar esta fila
-                    continue;
-                }
-
-                // Guardar los datos del usuario
-                $usuarioData = [
-                    'matricula' => $row[0],
-                    'nombre' => $row[1],
-                    'tipo_usuario' => $row[2],
-                    'sexo' => $row[3],
-                    'carrera' => $row[4],
-                    'turno' => $row[5],
-                    'carrera_id' => $row[6], // Asumiendo que este campo es opcional
-                ];
-
-                // Crear el registro del usuario
-                Usuarios::create($usuarioData);
-            }
-            fclose($handle);
+            return back()->with('success', 'Usuarios importados exitosamente.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al importar los usuarios: ' . $e->getMessage());
         }
-
-        return back()->with('success', 'Usuarios importados exitosamente.');
     }
 
     public function index(Request $request)
@@ -150,5 +123,52 @@ class UsuarioController extends Controller
         $usuario->delete();
 
         return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado exitosamente.');
+    }
+
+    // Método para importar desde un CSV
+    public function import(Request $request)
+    {
+        // Validación del archivo CSV
+        $request->validate([
+            'file' => 'required|mimes:csv,txt|max:2048',
+        ]);
+    
+        // Cargar el archivo
+        $file = $request->file('file');
+    
+        // Abrir el archivo y leer el contenido
+        $handle = fopen($file, 'r');
+        if ($handle) {
+            // Saltar la primera fila si es un encabezado
+            $firstRow = true;
+            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if ($firstRow) {
+                    $firstRow = false;
+                    continue;
+                }
+    
+                // Verificar si los campos requeridos están vacíos
+                if (empty($row[0]) || empty($row[1]) || empty($row[2])) {
+                    // Si faltan campos requeridos, saltar esta fila
+                    continue;
+                }
+    
+                // Guardar los datos del usuario
+                $usuarioData = [
+                    'matricula' => $row[0],
+                    'nombre' => $row[1],
+                    'tipo_usuario' => $row[2],
+                    'sexo' => $row[3],
+                    'carrera' => $row[4],
+                    'turno' => $row[5],
+                ];
+    
+                // Crear el registro del usuario
+                Usuarios::create($usuarioData);
+            }
+            fclose($handle);
+        }
+    
+        return back()->with('success', 'Usuarios importados exitosamente.');
     }
 }

@@ -2,27 +2,25 @@
 
 namespace App\Imports;
 
-use App\Models\Usuarios;
+use App\Models\Alumno;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class UsuarioImport implements ToModel, WithValidation
+class AlumnosImport implements ToModel, WithValidation
 {
     public function model(array $row)
     {
-     
-
-        
-
-        return new Usuarios([
-            'matricula' => $row[0],
+        return new Alumno([
+           'matrícula' => $row[0],
             'nombre' => $row[1],
-            'tipo_usuario' => $row[2],
-            'sexo' => $row[3],
-            'carrera' => $row[4],
+            'carrera' => $row[2],
+            'grado' => $row[3],
+            'grupo' => $row[4],
             'turno' => $row[5],
-            'carrera_id' => $carreraId,
+            'sexo' => $row[6],
+            'mail_institucional' => $row[7],
+
         ]);
     }
 
@@ -35,7 +33,10 @@ class UsuarioImport implements ToModel, WithValidation
             '3' => 'required', // sexo
             '4' => 'required', // carrera
             '5' => 'required', // turno
-            // Asegúrate de que el índice del carrera_id sea el correcto
+            '6' => 'required', // turno
+            '7' => 'required', // turno
+
+
         ];
     }
 }

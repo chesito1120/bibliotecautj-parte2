@@ -18,6 +18,6 @@ class Usuarios extends Model
         'sexo',
         'carrera',
         'turno',
-        'carrera_id',
+        
     ];
 }

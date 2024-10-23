@@ -9,15 +9,17 @@ class Alumno extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'matricula',
-        'nombre',
-        'carrera_id',
-        // otros campos
-    ];
+    protected $table = 'alumnos';
 
-    public function visitas()
-    {
-        return $this->hasMany(Visita::class);
-    }
+    protected $fillable = [
+        'matrícula',
+        'nombre',
+        'carrera',
+        'grado',
+        'grupo',
+        'turno',
+        'sexo',
+        'mail_institucional'
+    ];    
 }
+

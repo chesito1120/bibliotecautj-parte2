@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\VisitaController;
 use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\VisitaController;
 use App\Http\Controllers\LibroController;
+use App\Imports\UsuariosImport;
+use App\Imports\AlumnosImport;
 use App\Models\Alumno;  
 use App\Models\Maestro;  
 
@@ -17,18 +20,24 @@ Route::put('/visitas/{id}', [VisitaController::class, 'update'])->name('visitas.
 Route::delete('/visitas/{id}', [VisitaController::class, 'destroy'])->name('visitas.destroy');
 
 // Rutas para el controlador de usuarios
-Route::get('/usuarios/create', [UsuariosController::class, 'create'])->name('usuarios.create');
-Route::post('/usuarios/store', [UsuariosController::class, 'store'])->name('usuarios.store');
+Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios.index'); // Muestra todos los usuarios
+Route::get('/usuarios/create', [UsuariosController::class, 'create'])->name('usuarios.create'); // Muestra el formulario para crear un usuario
+Route::post('/usuarios', [UsuariosController::class, 'store'])->name('usuarios.store'); // Almacena un nuevo usuario
 
-//Rutas para subir csv de usuarios 
-Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios.index');
+// Rutas para subir CSV de usuarios
+Route::get('/usuarios/upload', [UsuariosController::class, 'showUploadForm'])->name('usuarios.upload.form'); // Muestra el formulario para cargar el CSV
+Route::post('/usuarios/import', [UsuariosController::class, 'import'])->name('usuarios.import'); // Cambié a import, que es el método correcto
 Route::post('/usuarios/import', [UsuariosController::class, 'import'])->name('usuarios.import');
 
-//Rutas para subir csv libros
+// Rutas para subir CSV de alumnos
+Route::get('/alumnos/upload', [AlumnoController::class, 'showUploadForm'])->name('alumnos.upload.form'); // Muestra el formulario para cargar el CSV de alumnos
+Route::post('/alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import'); // Procesa la importación del CSV de alumnos
+
+// Rutas para subir CSV de libros
 Route::get('libros/upload', [LibroController::class, 'showUploadForm'])->name('libros.upload.form');
 Route::post('libros/upload', [LibroController::class, 'uploadCSV'])->name('libros.upload');
 
-//CRUD libros
+// CRUD libros
 Route::get('/libros', [LibroController::class, 'index'])->name('libros.index');
 Route::get('/libros/create', [LibroController::class, 'create'])->name('libros.create');
 Route::post('/libros', [LibroController::class, 'store'])->name('libros.store');
@@ -36,6 +45,11 @@ Route::get('/libros/{libro}', [LibroController::class, 'show'])->name('libros.sh
 Route::get('/libros/{libro}/edit', [LibroController::class, 'edit'])->name('libros.edit');
 Route::put('/libros/{libro}', [LibroController::class, 'update'])->name('libros.update');
 Route::delete('/libros/{libro}', [LibroController::class, 'destroy'])->name('libros.destroy');
+
+Route::get('/usuarios/import', [UsuariosController::class, 'index'])->name('usuarios.index');
+Route::post('/usuarios/import', [UsuariosController::class, 'import'])->name('usuarios.import');
+Route::post('/usuarios/import', [UsuariosController::class, 'import'])->name('usuarios.import');
+
 
 // Ruta para obtener datos del usuario por matrícula (alumno o maestro)
 Route::get('/visitas/usuario/{matricula}', function ($matricula) {

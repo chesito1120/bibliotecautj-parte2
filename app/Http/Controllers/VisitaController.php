@@ -12,84 +12,72 @@ class VisitaController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    // total de visitas
-    $total_visitas = DB::table('visitas')->count();
+    {
+        // Total de visitas
+        $total_visitas = DB::table('visitas')->count();
+    
+        // Total de alumnos y maestros
+        $total_alumnos = DB::table('usuarios')
+            ->where('tipo_usuario', 'alumno')
+            ->count();
+        $total_maestros = DB::table('usuarios')
+            ->where('tipo_usuario', 'maestro')
+            ->count();
+    
+        // Visitas por servicio
+        $visitas_acervo = DB::table('visitas')
+            ->where('servicio', 'acervo')
+            ->count();
+        $visitas_computo = DB::table('visitas')
+            ->where('servicio', 'computo')
+            ->count();
+        $prestamos_externos = DB::table('visitas')
+            ->where('servicio', 'prestamo')
+            ->count();
+    
+        // Carrera con más visitas
+        $carrera_mas_visitas = DB::table('usuarios')
+            ->join('visitas', 'usuarios.id', '=', 'visitas.usuario_id')
+            ->select('usuarios.carrera')
+            ->groupBy('usuarios.carrera')
+            ->orderByRaw('COUNT(visitas.id) DESC')
+            ->limit(1)
+            ->pluck('carrera')
+            ->first();
+    
+        // Reporte detallado por carrera, tipo de usuario y sexo
+        $datos_carreras = DB::table('usuarios')
+            ->select('carrera', 'tipo_usuario', 'sexo', DB::raw('COUNT(*) as cantidad'))
+            ->join('visitas', 'usuarios.id', '=', 'visitas.usuario_id')
+            ->groupBy('carrera', 'tipo_usuario', 'sexo')
+            ->get()
+            ->groupBy('carrera');
+    
+        // Renderizar la vista con los datos
+        return view('visitas.index', [
+            'total_visitas' => $total_visitas,
+            'total_alumnos' => $total_alumnos,
+            'total_maestros' => $total_maestros,
+            'visitas_acervo' => $visitas_acervo,
+            'visitas_computo' => $visitas_computo,
+            'prestamos_externos' => $prestamos_externos,
+            'carrera_mas_visitas' => $carrera_mas_visitas ?? 'N/A',
+            'datos_carreras' => $datos_carreras,
+        ]);
+    }
+    
 
-    // total de alumnos y maestros
-    $total_alumnos = DB::table('usuarios')
-        ->where('tipo_usuario', 'alumno')
-        ->count();
-    $total_maestros = DB::table('usuarios')
-        ->where('tipo_usuario', 'maestro')
-        ->count();
-
-    // visitas por servicio
-    $visitas_acervo = DB::table('visitas')
-        ->where('servicio', 'acervo')
-        ->count();
-    $visitas_computo = DB::table('visitas')
-        ->where('servicio', 'computo')
-        ->count();
-    $prestamos_externos = DB::table('visitas')
-        ->where('servicio', 'prestamo')
-        ->count();
-
-    // carrera con más visitas
-    $carrera_mas_visitas = DB::table('usuarios')
-        ->join('visitas', 'usuarios.id', '=', 'visitas.usuario_id')
-        ->select('usuarios.carrera')
-        ->groupBy('usuarios.carrera')
-        ->orderByRaw('COUNT(visitas.id) DESC')
-        ->limit(1)
-        ->pluck('carrera')
-        ->first();
-
-     // Contar visitas y usuarios
-     $total_visitas = DB::table('visitas')->count();
-     $total_alumnos = DB::table('usuarios')->where('tipo_usuario', 'alumno')->count();
-     $total_maestros = DB::table('usuarios')->where('tipo_usuario', 'maestro')->count();
-     $visitas_acervo = DB::table('visitas')->where('servicio', 'acervo')->count();
-     $visitas_computo = DB::table('visitas')->where('servicio', 'computo')->count();
-     $prestamos_externos = DB::table('visitas')->where('servicio', 'prestamo')->count();
-
-     //  carrera que más visitas recibe
-     $carrera_mas_visitas = DB::table('usuarios')
-         ->select('carrera', DB::raw('COUNT(*) as cantidad'))
-         ->join('visitas', 'usuarios.id', '=', 'visitas.usuario_id')
-         ->groupBy('usuarios.carrera')
-         ->orderBy('cantidad', 'desc')
-         ->first();
-
-     // reporte detallado
-     $datos_carreras = DB::table('usuarios')
-         ->select('carrera', 'tipo_usuario', 'sexo', DB::raw('COUNT(*) as cantidad'))
-         ->join('visitas', 'usuarios.id', '=', 'visitas.usuario_id')
-         ->groupBy('carrera', 'tipo_usuario', 'sexo')
-         ->get()
-         ->groupBy('carrera');
-
-     return view('visitas.index', [
-         'total_visitas' => $total_visitas,
-         'total_alumnos' => $total_alumnos,
-         'total_maestros' => $total_maestros,
-         'visitas_acervo' => $visitas_acervo,
-         'visitas_computo' => $visitas_computo,
-         'prestamos_externos' => $prestamos_externos,
-         'carrera_mas_visitas' => $carrera_mas_visitas ? $carrera_mas_visitas->carrera : 'N/A',
-         'datos_carreras' => $datos_carreras,
-     ]);
-}
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        // Cargar las carreras desde la base de datos
-        $carreras = Carrera::all();
-        return view('visitas.create', compact('carreras'));
-    }
+{
+    // Obtener las carreras desde la tabla 'usuarios'
+    $carreras = DB::table('usuarios')->select('carrera')->distinct()->get();
+
+    return view('visitas.create', compact('carreras'));
+}
 
     /**
      * Store a newly created resource in storage.
