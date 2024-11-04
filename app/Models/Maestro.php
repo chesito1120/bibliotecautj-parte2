@@ -8,15 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Maestro extends Model
 {
     use HasFactory;
+ 
+
+    protected $table = 'maestros';
 
     protected $fillable = [
         'nombre',
-        'carrera_id',
-        // otros campos
-    ];
-
-    public function visitas()
-    {
-        return $this->hasMany(Visita::class);
-    }
+        'numero_empleado',
+        'carrera_ads',
+        'turno',
+        'sexo',
+        'puesto'
+    ]; 
 }

@@ -35,26 +35,21 @@ class UsuariosController extends Controller
 
     public function index(Request $request)
     {
-        // Recoge el valor del parámetro 'search' de la solicitud (si existe)
         $search = $request->input('search');
     
-        // Si hay un valor de búsqueda, se filtran los usuarios por nombre o matrícula
         if ($search) {
             $usuarios = Usuarios::where('nombre', 'like', "%{$search}%")
                                 ->orWhere('matricula', 'like', "%{$search}%")
                                 ->paginate(20);
         } else {
-            // Si no hay búsqueda, obtenemos todos los usuarios con paginación
             $usuarios = Usuarios::paginate(20);
         }
     
-        // Retornar la vista con los usuarios paginados
         return view('usuarios.index', compact('usuarios'));
     }
 
     public function create()
     {
-        // Muestra el formulario para crear un nuevo usuario
         return view('usuarios.create');
     }
 
@@ -68,7 +63,7 @@ class UsuariosController extends Controller
             'sexo' => 'required|string',
             'carrera' => 'required|string',
             'turno' => 'required|string',
-            'carrera_id' => 'nullable|integer', // Si este campo es opcional
+            'carrera_id' => 'nullable|integer', 
         ]);
 
         // Crear un nuevo usuario

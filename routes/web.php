@@ -3,10 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\MaestroController;
 use App\Http\Controllers\VisitaController;
 use App\Http\Controllers\LibroController;
 use App\Imports\UsuariosImport;
 use App\Imports\AlumnosImport;
+use App\Imports\MaestrosImport;
 use App\Models\Alumno;  
 use App\Models\Maestro;  
 
@@ -32,6 +34,10 @@ Route::post('/usuarios/import', [UsuariosController::class, 'import'])->name('us
 // Rutas para subir CSV de alumnos
 Route::get('/alumnos/upload', [AlumnoController::class, 'showUploadForm'])->name('alumnos.upload.form'); // Muestra el formulario para cargar el CSV de alumnos
 Route::post('/alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import'); // Procesa la importación del CSV de alumnos
+
+// Rutas para subir CSV de alumnos
+Route::get('/maestros/upload', [MaestroController::class, 'showUploadForm'])->name('maestros.upload.form'); // Muestra el formulario para cargar el CSV de alumnos
+Route::post('/maestros/import', [MaestroController::class, 'import'])->name('maestros.import'); // Procesa la importación del CSV de alumnos
 
 // Rutas para subir CSV de libros
 Route::get('libros/upload', [LibroController::class, 'showUploadForm'])->name('libros.upload.form');
