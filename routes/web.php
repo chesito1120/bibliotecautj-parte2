@@ -33,11 +33,19 @@ Route::post('/usuarios/import', [UsuariosController::class, 'import'])->name('us
 
 // Rutas para subir CSV de alumnos
 Route::get('/alumnos/upload', [AlumnoController::class, 'showUploadForm'])->name('alumnos.upload.form'); // Muestra el formulario para cargar el CSV de alumnos
-Route::post('/alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import'); // Procesa la importación del CSV de alumnos
+Route::post('/alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
+Route::get('/alumnos/create', [AlumnoController::class, 'create'])->name('alumnos.create');
 
-// Rutas para subir CSV de alumnos
-Route::get('/maestros/upload', [MaestroController::class, 'showUploadForm'])->name('maestros.upload.form'); // Muestra el formulario para cargar el CSV de alumnos
-Route::post('/maestros/import', [MaestroController::class, 'import'])->name('maestros.import'); // Procesa la importación del CSV de alumnos
+
+
+// Rutas para maestros
+Route::get('/maestros/upload', [MaestroController::class, 'showUploadForm'])->name('maestros.upload.form'); 
+Route::post('/maestros/import', [MaestroController::class, 'import'])->name('maestros.import'); 
+Route::get('/maestros/create', [MaestroController::class, 'create'])->name('maestros.create');
+Route::post('/maestros', [MaestroController::class, 'store'])->name('maestro.store');
+
+
+
 
 // Rutas para subir CSV de libros
 Route::get('libros/upload', [LibroController::class, 'showUploadForm'])->name('libros.upload.form');

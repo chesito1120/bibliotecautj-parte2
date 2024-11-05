@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Agregar Libro</title>
+    <title>Editar Libro</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,7 +32,7 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
-        input[type="text"], input[type="number"], input[type="file"] {
+        input[type="text"], input[type="number"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ced4da;
@@ -76,7 +76,7 @@
 <body>
 
     <div class="container">
-        <h2>Agregar Libro</h2>
+        <h2>Editar Libro</h2>
         <hr>
 
         <!-- Mensaje de éxito -->
@@ -97,51 +97,56 @@
             </div>
         @endif
 
-        <!-- Formulario para agregar libro -->
-        <form action="{{ route('libros.store') }}" method="POST">
+        <!-- Formulario para editar libro -->
+        <form action="{{ route('alumnos.update', $alumno) }}" method="POST">
             @csrf
+            @method('PUT')
+            <div class="form-group">
+                <label for="titulo">Clas. Dewey</label>
+                <input type="text" name="clas_dewey" id="clas_dewey" value="{{ $alumno->clas_dewey }}" required>
+            </div>
             <div class="form-group">
                 <label for="titulo">Título:</label>
-                <input type="text" name="titulo" id="titulo" required>
+                <input type="text" name="titulo" id="titulo" value="{{ $alumno->titulo }}" required>
             </div>
             <div class="form-group">
                 <label for="autor">Autor:</label>
-                <input type="text" name="autor" id="autor" required>
+                <input type="text" name="autor" id="autor" value="{{ $alumno->autor }}" required>
             </div>
             <div class="form-group">
                 <label for="editorial">Editorial:</label>
-                <input type="text" name="editorial" id="editorial" required>
+                <input type="text" name="editorial" id="editorial" value="{{ $alumno->editorial }}" required>
             </div>
             <div class="form-group">
                 <label for="edicion">Edición:</label>
-                <input type="text" name="edicion" id="edicion" required>
+                <input type="text" name="edicion" id="edicion" value="{{ $alumno->edicion }}" required>
             </div>
             <div class="form-group">
                 <label for="area_conocimiento">Área de Conocimiento:</label>
-                <input type="text" name="area_conocimiento" id="area_conocimiento" required>
+                <input type="text" name="area_conocimiento" id="area_conocimiento" value="{{ $alumno->area_conocimiento }}" required>
             </div>
             <div class="form-group">
                 <label for="pag">Páginas:</label>
-                <input type="number" name="pag" id="pag" required>
+                <input type="number" name="pag" id="pag" value="{{ $alumno->pag }}" required>
             </div>
             <div class="form-group">
                 <label for="isbn">ISBN:</label>
-                <input type="text" name="isbn" id="isbn" required>
+                <input type="text" name="isbn" id="isbn" value="{{ $alumno->isbn }}" required>
             </div>
             <div class="form-group">
                 <label for="area_sumario">Área de Sumario:</label>
-                <input type="text" name="area_sumario" id="area_sumario" required>
+                <input type="text" name="area_sumario" id="area_sumario" value="{{ $alumno->area_sumario }}" required>
             </div>
             <div class="form-group">
                 <label for="donacion_compra">Donación/Compra:</label>
-                <input type="text" name="donacion_compra" id="donacion_compra" required>
+                <input type="text" name="donacion_compra" id="donacion_compra" value="{{ $alumno->donacion_compra }}" required>
             </div>
             <div class="form-group">
                 <label for="fecha_ingreso">Fecha de Ingreso:</label>
-                <input type="text" name="fecha_ingreso" id="fecha_ingreso" required>
+                <input type="text" name="fecha_ingreso" id="fecha_ingreso" value="{{ $alumno->fecha_ingreso }}" required>
             </div>
 
-            <button type="submit" class="btn btn-success">Agregar Libro</button>
+            <button type="submit" class="btn btn-success">Actualizar alumno</button>
             <a href="{{ route('libros.index') }}" class="btn btn-danger">Cancelar</a>
         </form>
     </div>

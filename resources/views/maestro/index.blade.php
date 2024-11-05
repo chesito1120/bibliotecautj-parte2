@@ -8,35 +8,51 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #e8f5e9; /* Verde suave */
             margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
         .container {
             max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
             background-color: #ffffff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 500px;
+            margin: 0 auto 20px;
         }
         h2 {
-            text-align: center;
+            color: #2e7d32; /* Verde más oscuro */
+            margin-bottom: 20px;
+        }
+        hr {
+            border: none;
+            height: 2px;
+            background-color: #2e7d32;
             margin-bottom: 20px;
         }
         .form-group {
             margin-bottom: 15px;
+            text-align: left;
         }
         label {
-            display: block;
-            margin-bottom: 5px;
             font-weight: bold;
+            color: #2e7d32;
         }
         input[type="file"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ced4da;
             border-radius: 4px;
+            outline: none;
+            margin-top: 5px;
         }
         .btn {
             padding: 10px 20px;
@@ -44,38 +60,43 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            margin-top: 10px;
+            width: 48%;
+            display: inline-block;
         }
         .btn-success {
-            background-color: #28a745;
+            background-color: #4caf50;
             color: white;
         }
         .btn-danger {
-            background-color: #dc3545;
+            background-color: #d32f2f;
             color: white;
-            margin-right: 10px;
         }
         .btn:hover {
             opacity: 0.9;
         }
         .alert {
             padding: 10px;
-            margin-bottom: 20px;
             border-radius: 4px;
             font-size: 16px;
+            margin-bottom: 20px;
         }
         .alert-success {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: #c8e6c9; /* Verde claro */
+            color: #2e7d32; /* Verde más oscuro */
         }
         .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: #ffcdd2;
+            color: #c62828;
         }
-    </style>
+    </style>    
 </head>
-<body>
-
+<body>  
+        
     <div class="container">
+        <!-- Logo -->
+        <img src="{{ asset('images/logo_utj.png') }}" alt="Logo" class="logo">
+
         <h2>Importar Docentes desde CSV</h2>
         <hr>
 

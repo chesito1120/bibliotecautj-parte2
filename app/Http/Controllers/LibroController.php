@@ -101,7 +101,7 @@ class LibroController extends Controller
         // Retornar la vista con los libros paginados
         return view('libros.index', compact('libros'));
     }
-    
+        
 
 
     public function create()
