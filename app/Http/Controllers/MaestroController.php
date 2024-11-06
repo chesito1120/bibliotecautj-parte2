@@ -105,7 +105,7 @@ public function update(Request $request, Maestro $maestro)
         ],
         'nombre' => 'required|string',
         'numero_empleado' => 'required|string',
-        'carrera_ads' => 'required|integer',
+        'carrera_ads' => 'required|string',
         'turno' => 'required|string',
         'sexo' => 'required|string',
         'puesto' => 'required|string',      
