@@ -76,7 +76,7 @@
 <body>
 
     <div class="container">
-        <h2>Editar Libro</h2>
+        <h2>Editar a un docente</h2>
         <hr>
 
         <!-- Mensaje de éxito -->
@@ -97,57 +97,37 @@
             </div>
         @endif
 
-        <!-- Formulario para editar libro -->
-        <form action="{{ route('alumnos.update', $alumno) }}" method="POST">
+        <!-- Formulario para editar masters -->
+        <form action="{{ route('maestros.update', $maestro) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="form-group">
-                <label for="titulo">Clas. Dewey</label>
-                <input type="text" name="clas_dewey" id="clas_dewey" value="{{ $alumno->clas_dewey }}" required>
+                <label for="nombre">Nombre del Docente>
+                <input type="text" name="nombre" id="nombre" value="{{ $maestro->nombre }}" required>
             </div>
             <div class="form-group">
-                <label for="titulo">Título:</label>
-                <input type="text" name="titulo" id="titulo" value="{{ $alumno->titulo }}" required>
+                <label for="numero_empleado">Numero de empleado:</label>
+                <input type="text" name="numero_empleado" id="numero_empleado" value="{{ $maestro->numero_empleado }}" required>
             </div>
             <div class="form-group">
-                <label for="autor">Autor:</label>
-                <input type="text" name="autor" id="autor" value="{{ $alumno->autor }}" required>
+                <label for="carrera_ads">Carrera Asignada:</label>
+                <input type="text" name="carrera_ads" id="carrera_ads" value="{{ $maestro->carrera_ads }}" required>
             </div>
             <div class="form-group">
-                <label for="editorial">Editorial:</label>
-                <input type="text" name="editorial" id="editorial" value="{{ $alumno->editorial }}" required>
+                <label for="turno">Turno:</label>
+                <input type="text" name="turno" id="turno" value="{{ $maestro->turno }}" required>
             </div>
             <div class="form-group">
-                <label for="edicion">Edición:</label>
-                <input type="text" name="edicion" id="edicion" value="{{ $alumno->edicion }}" required>
+                <label for="sexo">Sexo:</label>
+                <input type="text" name="sexo" id="sexo" value="{{ $maestro->sexo }}" required>
             </div>
             <div class="form-group">
-                <label for="area_conocimiento">Área de Conocimiento:</label>
-                <input type="text" name="area_conocimiento" id="area_conocimiento" value="{{ $alumno->area_conocimiento }}" required>
-            </div>
-            <div class="form-group">
-                <label for="pag">Páginas:</label>
-                <input type="number" name="pag" id="pag" value="{{ $alumno->pag }}" required>
-            </div>
-            <div class="form-group">
-                <label for="isbn">ISBN:</label>
-                <input type="text" name="isbn" id="isbn" value="{{ $alumno->isbn }}" required>
-            </div>
-            <div class="form-group">
-                <label for="area_sumario">Área de Sumario:</label>
-                <input type="text" name="area_sumario" id="area_sumario" value="{{ $alumno->area_sumario }}" required>
-            </div>
-            <div class="form-group">
-                <label for="donacion_compra">Donación/Compra:</label>
-                <input type="text" name="donacion_compra" id="donacion_compra" value="{{ $alumno->donacion_compra }}" required>
-            </div>
-            <div class="form-group">
-                <label for="fecha_ingreso">Fecha de Ingreso:</label>
-                <input type="text" name="fecha_ingreso" id="fecha_ingreso" value="{{ $alumno->fecha_ingreso }}" required>
+                <label for="puesto">Puesto que desempeña:</label>
+                <input type="text" name="puesto" id="puesto" value="{{ $maestro->puesto }}" required>
             </div>
 
-            <button type="submit" class="btn btn-success">Actualizar alumno</button>
-            <a href="{{ route('libros.index') }}" class="btn btn-danger">Cancelar</a>
+            <button type="submit" class="btn btn-success">Actualizar Libro</button>
+            <a href="{{ route('maestros.edit') }}" class="btn btn-danger">Cancelar</a>
         </form>
     </div>
 

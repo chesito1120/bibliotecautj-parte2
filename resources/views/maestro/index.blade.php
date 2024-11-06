@@ -1,110 +1,68 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Importar Docentes</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-        }
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .btn-success {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-            margin-right: 10px;
-        }
-        .btn:hover {
-            opacity: 0.9;
-        }
-        .alert {
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
-</head>
-<body>
+@extends('adminlte::page')
 
-    <div class="container">
-        <h2>Importar Docentes desde CSV</h2>
-        <hr>
+@section('title', 'Lista de Docentes')
 
-        <!-- Mensaje de éxito -->
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+@section('content')
+<div class="container">
+    <h2 class="text-center">Lista de Docentes</h2>
 
-        <!-- Mensaje de error -->
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <!-- Formulario para cargar CSV -->
-        <form action="{{ route('maestros.import') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group">
-                <label for="file">Seleccionar archivo CSV:</label>
-                <input type="file" name="file" id="file" required>
-            </div>
-
-            <button type="submit" class="btn btn-success">Importar CSV</button>
-            <a href="/" class="btn btn-danger">Cancelar</a>
+    <!-- Formulario de búsqueda -->
+    <div class="search-container text-center mb-4">
+        <form action="{{ route('maestro.index') }}" method="GET">
+            <input type="text" name="search" placeholder="Buscar por nombre" value="{{ request('search') }}" class="form-control d-inline-block w-75">
+            <button type="submit" class="btn btn-primary">Buscar</button>
         </form>
     </div>
 
-</body>
-</html>
+    <!-- Tabla de Docentes -->
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Carrera</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($maestros as $maestro)
+                <tr>
+                    <td>{{ $maestro->id }}</td>
+                    <td>{{ $maestro->nombre }}</td>
+                    <td>{{ $maestro->carrera_ads }}</td>
+                    <td>
+                        <a href="{{ route('maestro.show', $maestro) }}" class="btn btn-info">Ver</a>
+                        <a href="{{ route('maestro.edit', $maestro) }}" class="btn btn-warning btn-sm">Editar</a>
+                       <form action="{{ route('maestro.destroy', $maestro) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="4" class="text-center">No se encontraron docentes</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <!-- Mensaje de resultados -->
+    @if($maestros->total() > 0)
+        <div class="results-info text-center">
+            Mostrando {{ $maestros->firstItem() }} a {{ $maestros->lastItem() }} de {{ $maestros->total() }} resultados
+        </div>
+    @endif
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center mt-4">
+        {{ $maestros->appends(['search' => request('search')])->links() }}
+    </div>
+
+    <!-- Botón para agregar nuevo docente -->
+    <div class="text-center mt-4">
+        <a href="{{ route('maestros.create') }}" class="btn btn-success">Agregar Nuevo Docente</a>
+    </div>
+</div>
+@endsection

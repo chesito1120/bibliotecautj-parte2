@@ -15,7 +15,7 @@ class MaestroController extends Controller
 // Método para mostrar el formulario de carga de CSV
 public function showUploadForm()
 {
-    return view('maestro.index'); // Cambia la referencia a la vista correcta
+    return view('maestro.subir_maestros'); // Cambia la referencia a la vista correcta
 }
 
 // Método para manejar la carga del archivo CSV
@@ -47,18 +47,17 @@ public function index(Request $request)
                         ->orWhere('numero_empleado', 'like', "%{$search}%")
                         ->paginate(20);
     } else {
-        // Si no hay búsqueda, obtenemos todos los maestro con paginación
         $maestros = Maestro::paginate(20);
     }
 
     // Retornar la vista con los maestros paginados
-    return view('maestros.index', compact('maestros'));
+    return view('maestro.index', compact('maestros'));
 }
 
 public function create()
 {
-    // Muestra el formulario para crear un nuevo alumno
-    return view('maestros.create');
+    // Muestra el formulario para crear un nuevo master
+    return view('maestro.create');
 }
 
 public function store(Request $request)
@@ -66,7 +65,7 @@ public function store(Request $request)
     // Validar la solicitud
     $request->validate([
         'nombre' => 'required|string',
-        'numero_emoleado' => 'required|integer|unique:maestros',
+        'numero_empleado' => 'required|integer|unique:maestros',
         'carrera_ads' => 'required|string',
         'turno' => 'required|string',
         'sexo' => 'required|string',
@@ -76,19 +75,18 @@ public function store(Request $request)
     // Crear un nuevo maestro
     Maestro::create($request->all());
 
-    return redirect()->route('maestros.index')->with('success', 'Maestro creado exitosamente.');
+    return redirect()->route('maestros.create')->with('success', 'Maestro creado exitosamente.');
 }
 
 public function show(Maestro $maestro)
 {
     // Muestra un maestro específico
-    return view('maestros.show', compact('maestro'));
+    return view('maestro.show', compact('maestro'));
 }
 
 public function edit(Maestro $maestro)
 {
-    // Muestra el formulario para editar un maestro
-    return view('maestros.edit', compact('maestro'));
+    return view('maestro.edit', compact('maestro'));
 }
 
 public function update(Request $request, Maestro $maestro)
@@ -125,7 +123,7 @@ public function destroy(Maestro $maestro)
     // Eliminar un alumno
     $maestro->delete();
 
-    return redirect()->route('maestros.index')->with('success', 'Maestro eliminado exitosamente.');
+    return redirect()->route('maestro.index')->with('success', 'Maestro eliminado exitosamente.');
 }
 
 // Método para importar desde un CSV

@@ -85,8 +85,6 @@ class LibroController extends Controller
 
     
 
-
-
     public function index(Request $request)
     {
         // Recoge el valor del parámetro 'search' de la solicitud (si existe)
@@ -105,7 +103,7 @@ class LibroController extends Controller
         // Retornar la vista con los libros paginados
         return view('libros.index', compact('libros'));
     }
-    
+        
 
 
     public function create()
