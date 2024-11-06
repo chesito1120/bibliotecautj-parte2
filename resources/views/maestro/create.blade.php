@@ -1,133 +1,72 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Agregar Docente</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="number"], input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-        }
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .btn-success {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-            margin-right: 10px;
-        }
-        .btn:hover {
-            opacity: 0.9;
-        }
-        .alert {
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
-</head>
-<body>
+@extends('adminlte::page')
+
+@section('content')
 
     <div class="container">
-        <h2>Agregar Nuevo Docente</h2>
-        <hr>
+        <div class="row">
+            <!-- Logo y Título -->
+            <div class="col-12 text-center mb-4">
+                <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
+                <h2 style="color: #2F4F4F;">Agregar Nuevo Docente</h2>
+            </div>
+            
+            <!-- Formulario -->
+            <form action="{{ route('maestro.store') }}" method="POST" class="col-lg-7 mx-auto">
+                @csrf
 
-        <!-- Mensaje de éxito -->
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+                <!-- Mensaje de éxito -->
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-        <!-- Mensaje de error -->
-        @if($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+                <!-- Mensaje de error -->
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-        <!-- Formulario para agregar a un master -->
-        <form action="{{ route('maestro.store') }}" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="nombre">Nombre del Docente:</label>
-                <input type="text" name="nombre" id="nombre" required>
-            </div>
-            <div class="form-group">
-                <label for="numero_empleado">Numero de empledado.:</label>
-                <input type="text" name="numero_empleado" id="numero_empleado" required>
-            </div>
-            <div class="form-group">
-                <label for="carrera_ads">Carrera Asignada:</label>
-                <input type="text" name="carrera_ads" id="carrera_ads" required>
-            </div>
-            <div class="form-group">
-                <label for="turno">turno:</label>
-                <input type="text" name="turno" id="turno" required>
-            </div>
-            <div class="form-group">
-                <label for="sexo">Sexo:</label>
-                <input type="text" name="sexo" id="sexo" required>
-            </div>
-            <div class="form-group">
-                <label for="puesto">puesto:</label>
-                <input type="text" name="puesto" id="puesto" required>
-            </div>
-            <button type="submit" class="btn btn-success">Agregar Docente</button>
-            <a href="{{ route('maestros.create') }}" class="btn btn-danger">Cancelar</a>
-        </form>
+                <div class="form-group">
+                    <label for="nombre" style="color: #2E8B57;">Nombre del Docente:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="numero_empleado" style="color: #2E8B57;">Número de Empleado:</label>
+                    <input type="text" class="form-control" id="numero_empleado" name="numero_empleado" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="carrera_ads" style="color: #2E8B57;">Carrera Asignada:</label>
+                    <input type="text" class="form-control" id="carrera_ads" name="carrera_ads" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="turno" style="color: #2E8B57;">Turno:</label>
+                    <input type="text" class="form-control" id="turno" name="turno" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="sexo" style="color: #2E8B57;">Sexo:</label>
+                    <input type="text" class="form-control" id="sexo" name="sexo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="puesto" style="color: #2E8B57;">Puesto:</label>
+                    <input type="text" class="form-control" id="puesto" name="puesto" required>
+                </div>
+
+                <!-- Botones -->
+                <a href="{{ route('maestros.create') }}" class="btn" style="background-color: #556B2F; color: white; margin-right: 10px;">Cancelar</a>
+                <button type="submit" class="btn" style="background-color: #6B8E23; color: white;">Agregar Docente</button>
+            </form>
+        </div>
     </div>
 
-</body>
-</html>
+@endsection

@@ -38,10 +38,17 @@ Route::get('/alumnos/create', [AlumnoController::class, 'create'])->name('alumno
 
 
 
-// Rutas para maestros
+//Rutas para maestros
 Route::get('/maestros/upload', [MaestroController::class, 'showUploadForm'])->name('maestros.upload.form'); 
 Route::post('/maestros/import', [MaestroController::class, 'import'])->name('maestros.import'); 
 Route::get('/maestros/create', [MaestroController::class, 'create'])->name('maestros.create');
+Route::get('/maestros/{maestro}/edit', [MaestroController::class, 'edit'])->name('maestro.edit');
+Route::get('/maestros/{maestro}', [MaestroController::class, 'show'])->name('maestro.show');
+Route::delete('/maestros/{maestro}', [MaestroController::class, 'destroy'])->name('maestro.destroy');
+Route::put('/maestros/{maestro}', [MaestroController::class, 'update'])->name('maestros.update');
+
+
+Route::get('/maestros', [MaestroController::class, 'index'])->name('maestro.index');
 Route::post('/maestros', [MaestroController::class, 'store'])->name('maestro.store');
 
 

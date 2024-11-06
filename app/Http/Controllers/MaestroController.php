@@ -15,7 +15,7 @@ class MaestroController extends Controller
 // Método para mostrar el formulario de carga de CSV
 public function showUploadForm()
 {
-    return view('maestro.index'); // Cambia la referencia a la vista correcta
+    return view('maestro.subir_maestros'); // Cambia la referencia a la vista correcta
 }
 
 // Método para manejar la carga del archivo CSV
@@ -47,7 +47,6 @@ public function index(Request $request)
                         ->orWhere('numero_empleado', 'like', "%{$search}%")
                         ->paginate(20);
     } else {
-        // Si no hay búsqueda, obtenemos todos los maestro con paginación
         $maestros = Maestro::paginate(20);
     }
 
@@ -87,7 +86,6 @@ public function show(Maestro $maestro)
 
 public function edit(Maestro $maestro)
 {
-    // Muestra el formulario para editar un maestro
     return view('maestro.edit', compact('maestro'));
 }
 

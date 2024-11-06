@@ -81,8 +81,6 @@ class LibroController extends Controller
 
     
 
-
-
     public function index(Request $request)
     {
         // Recoge el valor del parámetro 'search' de la solicitud (si existe)
