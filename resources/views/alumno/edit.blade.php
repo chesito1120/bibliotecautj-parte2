@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Editar Libro</title>
+    <title>Editar Alumno</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,7 +32,7 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
-        input[type="text"], input[type="number"] {
+        input[type="text"], input[type="number"], input[type="email"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ced4da;
@@ -76,7 +76,7 @@
 <body>
 
     <div class="container">
-        <h2>Editar Libro</h2>
+        <h2>Editar Alumno</h2>
         <hr>
 
         <!-- Mensaje de éxito -->
@@ -97,57 +97,45 @@
             </div>
         @endif
 
-        <!-- Formulario para editar libro -->
+        <!-- Formulario para editar alumno -->
         <form action="{{ route('alumnos.update', $alumno) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="form-group">
-                <label for="titulo">Clas. Dewey</label>
-                <input type="text" name="clas_dewey" id="clas_dewey" value="{{ $alumno->clas_dewey }}" required>
+                <label for="matricula">Matrícula:</label>
+                <input type="number" name="matricula" id="matricula" value="{{ $alumno->matricula }}" required readonly>
             </div>
             <div class="form-group">
-                <label for="titulo">Título:</label>
-                <input type="text" name="titulo" id="titulo" value="{{ $alumno->titulo }}" required>
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" value="{{ $alumno->nombre }}" required readonly>
             </div>
             <div class="form-group">
-                <label for="autor">Autor:</label>
-                <input type="text" name="autor" id="autor" value="{{ $alumno->autor }}" required>
+                <label for="carrera">Carrera:</label>
+                <input type="text" name="carrera" id="carrera" value="{{ $alumno->carrera }}" required>
             </div>
             <div class="form-group">
-                <label for="editorial">Editorial:</label>
-                <input type="text" name="editorial" id="editorial" value="{{ $alumno->editorial }}" required>
+                <label for="grado">Grado:</label>
+                <input type="number" name="grado" id="grado" value="{{ $alumno->grado }}" required>
             </div>
             <div class="form-group">
-                <label for="edicion">Edición:</label>
-                <input type="text" name="edicion" id="edicion" value="{{ $alumno->edicion }}" required>
+                <label for="grupo">Grupo:</label>
+                <input type="text" name="grupo" id="grupo" value="{{ $alumno->grupo }}" required>
             </div>
             <div class="form-group">
-                <label for="area_conocimiento">Área de Conocimiento:</label>
-                <input type="text" name="area_conocimiento" id="area_conocimiento" value="{{ $alumno->area_conocimiento }}" required>
+                <label for="turno">Turno:</label>
+                <input type="text" name="turno" id="turno" value="{{ $alumno->turno }}" required>
             </div>
             <div class="form-group">
-                <label for="pag">Páginas:</label>
-                <input type="number" name="pag" id="pag" value="{{ $alumno->pag }}" required>
+                <label for="sexo">Sexo:</label>
+                <input type="text" name="sexo" id="sexo" value="{{ $alumno->sexo }}" required readonly>
             </div>
             <div class="form-group">
-                <label for="isbn">ISBN:</label>
-                <input type="text" name="isbn" id="isbn" value="{{ $alumno->isbn }}" required>
-            </div>
-            <div class="form-group">
-                <label for="area_sumario">Área de Sumario:</label>
-                <input type="text" name="area_sumario" id="area_sumario" value="{{ $alumno->area_sumario }}" required>
-            </div>
-            <div class="form-group">
-                <label for="donacion_compra">Donación/Compra:</label>
-                <input type="text" name="donacion_compra" id="donacion_compra" value="{{ $alumno->donacion_compra }}" required>
-            </div>
-            <div class="form-group">
-                <label for="fecha_ingreso">Fecha de Ingreso:</label>
-                <input type="text" name="fecha_ingreso" id="fecha_ingreso" value="{{ $alumno->fecha_ingreso }}" required>
+                <label for="mail_institucional">Email Institucional:</label>
+                <input type="email" name="mail_institucional" id="mail_institucional" value="{{ $alumno->mail_institucional }}" required readonly>
             </div>
 
-            <button type="submit" class="btn btn-success">Actualizar alumno</button>
-            <a href="{{ route('libros.index') }}" class="btn btn-danger">Cancelar</a>
+            <button type="submit" class="btn btn-success">Actualizar Alumno</button>
+            <a href="{{ route('alumnos.index') }}" class="btn btn-danger">Cancelar</a>
         </form>
     </div>
 
