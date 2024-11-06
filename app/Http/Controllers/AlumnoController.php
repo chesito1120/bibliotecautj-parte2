@@ -12,7 +12,7 @@ class AlumnoController extends Controller
     // Método para mostrar el formulario de carga de CSV
     public function showUploadForm()
     {
-        return view('alumno.index'); // Cambia la referencia a la vista correcta
+        return view('alumno.subir_alumnos'); // Cambia la referencia a la vista correcta
     }
 
     // Método para manejar la carga del archivo CSV
@@ -49,13 +49,13 @@ class AlumnoController extends Controller
         }
 
         // Retornar la vista con los alumnos paginados
-        return view('alumnos.index', compact('alumnos'));
+        return view('alumno.index', compact('alumnos'));
     }
 
     public function create()
     {
         // Muestra el formulario para crear un nuevo alumno
-        return view('alumnos.create');
+        return view('alumno.create');
     }
 
     public function store(Request $request)
@@ -63,61 +63,50 @@ class AlumnoController extends Controller
         // Validar la solicitud
         $request->validate([
             'matricula' => 'required|integer|unique:alumnos',
-            'nombre' => 'required|string',
-            'carrera' => 'required|string',
+            'nombre' => 'required|string|max:255',
+            'carrera' => 'required|string|max:255',
             'grado' => 'required|integer',
-            'grupo' => 'required|string',
-            'turno' => 'required|string',
+            'grupo' => 'required|string|max:255',
+            'turno' => 'required|string|max:255',
             'sexo' => 'required|string',
-            'mai_institucional' => 'required|string',
+            'mail_institucional' => 'required|string|email|max:255',
         ]);
 
         // Crear un nuevo alumno
         Alumno::create($request->all());
 
-        return redirect()->route('alumnos.index')->with('success', 'Alumno creado exitosamente.');
+        return redirect()->route('alumno.index')->with('success', 'Alumno creado exitosamente.');
     }
 
     public function show(Alumno $alumno)
     {
         // Muestra un alumno específico
-        return view('alumnos.show', compact('alumno'));
+        return view('alumno.show', compact('alumno'));
     }
 
     public function edit(Alumno $alumno)
     {
         // Muestra el formulario para editar un alumno
-        return view('alumnos.edit', compact('alumno'));
+        return view('alumno.edit', compact('alumno'));
     }
 
     public function update(Request $request, Alumno $alumno)
     {
-        // Validar la solicitud con condición en la validación de la matrícula
         $request->validate([
-            'matricula' => [
-                'required',
-                'integer',
-                function ($attribute, $value, $fail) use ($alumno) {
-                    // Solo validar si la matrícula ha cambiado
-                    if ($value !== $alumno->matricula && Alumno::where('matricula', $value)->exists()) {
-                        $fail('La matrícula ya está en uso.');
-                    }
-                },
-            ],
-            'nombre' => 'required|string',
-            'carrera' => 'required|string',
-            'grado' => 'required|integer',
-            'grupo' => 'required|string',
-            'turno' => 'required|string',
-            'sexo' => 'required|string',
-            'mail_institucional' => 'required|string',      
-            
+            'matricula' => 'required|unique:alumnos,matricula,' . $alumno->id,
+            'nombre' => 'required',
+            'carrera' => 'required',
+            'grado' => 'required',
+            'grupo' => 'required',
+            'turno' => 'required',
+            'sexo' => 'required',
+            'mail_institucional' => 'required|email',
         ]);
-
-        // Actualizar el alumno
+    
+        // Actualiza los datos del alumno
         $alumno->update($request->all());
-
-        return redirect()->route('alumnos.index')->with('success', 'Alumno actualizado exitosamente.');
+    
+        return redirect()->route('alumnos.index')->with('success', 'Alumno actualizado correctamente.');
     }
 
     public function destroy(Alumno $alumno)

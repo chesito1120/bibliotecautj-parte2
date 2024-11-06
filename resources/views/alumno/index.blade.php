@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Importar Alumnos</title>
+    <title>Lista de Alumnos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,37 +13,45 @@
             padding: 20px;
         }
         .container {
-            max-width: 600px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
             background-color: #ffffff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
             border-radius: 8px;
         }
         h2 {
             text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-bottom: 20px;
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
+        th, td {
+            padding: 12px;
             border: 1px solid #ced4da;
-            border-radius: 4px;
+            text-align: left;
+            font-size: 16px;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
         }
         .btn {
-            padding: 10px 20px;
+            padding: 10px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px 0;
         }
         .btn-success {
             background-color: #28a745;
@@ -52,59 +60,135 @@
         .btn-danger {
             background-color: #dc3545;
             color: white;
-            margin-right: 10px;
+        }
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .btn-warning {
+            background-color: #ffc107;
+            color: black;
         }
         .btn:hover {
             opacity: 0.9;
         }
-        .alert {
-            padding: 10px;
+        .search-container {
             margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-container input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            border: 1px solid #ced4da;
             border-radius: 4px;
             font-size: 16px;
         }
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
+        .search-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
+        .search-container button:hover {
+            opacity: 0.9;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .pagination button, .pagination a {
+            padding: 10px 15px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 16px;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0 5px;
+        }
+        .pagination button:hover, .pagination a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .results-info {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #333;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h2>Importar Estudiantes desde CSV</h2>
-        <hr>
+        <h2>Lista de Alumnos</h2>
 
-        <!-- Mensaje de éxito -->
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+        <!-- Formulario de búsqueda -->
+        <div class="search-container">
+            <form action="{{ route('alumnos.index') }}" method="GET">
+                <input type="text" name="search" placeholder="Buscar por nombre o matrícula..." value="{{ request('search') }}">
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
 
-        <!-- Mensaje de error -->
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
+        <!-- Tabla de alumnos -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Matrícula</th>
+                    <th>Carrera</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($alumnos as $alumno)
+                    <tr>
+                        <td>{{ $alumno->id }}</td>
+                        <td>{{ $alumno->nombre }}</td>
+                        <td>{{ $alumno->matricula }}</td>
+                        <td>{{ $alumno->carrera }}</td>
+                        <td>
+                            <a href="{{ route('alumnos.show', $alumno) }}" class="btn btn-info">Ver</a>
+                            <a href="{{ route('alumnos.edit', $alumno) }}" class="btn btn-warning">Editar</a>
+                            <form action="{{ route('alumnos.destroy', $alumno) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" style="text-align:center;">No se encontraron alumnos</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
 
-        <!-- Formulario para cargar CSV -->
-        <form action="{{ route('alumnos.import') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group">
-                <label for="file">Seleccionar archivo CSV:</label>
-                <input type="file" name="file" id="file" required>
-            </div>
+        <!-- Mensaje de resultados -->
+        <div class="results-info">
+            Mostrando {{ $alumnos->firstItem() }} a {{ $alumnos->lastItem() }} de {{ $alumnos->total() }} resultados
+        </div>
 
-            <button type="submit" class="btn btn-success">Importar CSV</button>
-            <a href="/" class="btn btn-danger">Cancelar</a>
-        </form>
+        <!-- Paginación -->
+        <div class="pagination-container">
+            {{ $alumnos->appends(['search' => request('search')])->links() }}
+        </div>
+
+        <!-- Botón para agregar nuevo alumno -->
+        <div style="text-align: center;">
+            <a href="{{ route('alumnos.create') }}" class="btn btn-success">Agregar Nuevo Alumno</a>
+        </div>
     </div>
-
 </body>
 </html>

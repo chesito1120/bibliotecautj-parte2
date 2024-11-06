@@ -35,7 +35,7 @@ Route::post('/usuarios/import', [UsuariosController::class, 'import'])->name('us
 Route::get('/alumnos/upload', [AlumnoController::class, 'showUploadForm'])->name('alumnos.upload.form'); // Muestra el formulario para cargar el CSV de alumnos
 Route::post('/alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import'); // Procesa la importación del CSV de alumnos
 
-// Rutas para subir CSV de alumnos
+// Rutas para subir CSV de profesores
 Route::get('/maestros/upload', [MaestroController::class, 'showUploadForm'])->name('maestros.upload.form'); // Muestra el formulario para cargar el CSV de alumnos
 Route::post('/maestros/import', [MaestroController::class, 'import'])->name('maestros.import'); // Procesa la importación del CSV de alumnos
 
@@ -51,6 +51,10 @@ Route::get('/libros/{libro}', [LibroController::class, 'show'])->name('libros.sh
 Route::get('/libros/{libro}/edit', [LibroController::class, 'edit'])->name('libros.edit');
 Route::put('/libros/{libro}', [LibroController::class, 'update'])->name('libros.update');
 Route::delete('/libros/{libro}', [LibroController::class, 'destroy'])->name('libros.destroy');
+
+// CRUD alumnos
+Route::resource('/alumnos', AlumnoController::class);
+
 
 Route::get('/usuarios/import', [UsuariosController::class, 'index'])->name('usuarios.index');
 Route::post('/usuarios/import', [UsuariosController::class, 'import'])->name('usuarios.import');
