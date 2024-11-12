@@ -38,7 +38,7 @@ class AlumnoController extends Controller
         // Recoge el valor del parámetro 'search' de la solicitud (si existe)
         $search = $request->input('search');
 
-        // Si hay un valor de búsqueda, se filtran los alumnos por nombre o matrícula
+        // Si hay un valor de búsqueda, se filtran los alumnos por nombre o matricula
         if ($search) {
             $alumnos = Alumno::where('nombre', 'like', "%{$search}%")
                             ->orWhere('matricula', 'like', "%{$search}%")
@@ -147,7 +147,7 @@ class AlumnoController extends Controller
 
                 // Guardar los datos del alumno
                 $alumnoData = [
-                    'matrícula' => $row[0],
+                    'matricula' => $row[0],
                     'nombre' => $row[1],
                     'carrera' => $row[2],
                     'grado' => $row[3],

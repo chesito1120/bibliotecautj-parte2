@@ -43,8 +43,33 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="carrera_ads" style="color: #2E8B57;">Carrera Asignada:</label>
-                    <input type="text" class="form-control" id="carrera_ads" name="carrera_ads" required>
+                    <label for="carrera_ads" style="color: #2C6E49;">Carrera Asignada:</label>
+                    <select class="form-control border border-success" id="carrera_ads" name="carrera_ads" required>
+                        <option value="">Seleccione su carrera</option>
+                        <option value="Licenciatura en Administración">Licenciatura en Administración</option>
+                        <option value="TSU Gestión del Capital Humano">TSU Gestión del Capital Humano</option>
+                        <option value="Ingeniería Ambiental y Sustentabilidad">Ingeniería Ambiental y Sustentabilidad</option>
+                        <option value="TSU Gestión Ambiental">TSU Gestión Ambiental</option>
+                        <option value="Ingeniería en Química Farmacéutica">Ingeniería en Química Farmacéutica</option>
+                        <option value="TSU Química Tecnología Farmacéutica">TSU Química Tecnología Farmacéutica</option>
+                        <option value="Licenciatura en Asesor Financiero">Licenciatura en Asesor Financiero</option>
+                        <option value="TSU Asesor Financiero">TSU Asesor Financiero</option>
+                        <option value="Ingeniería Mecatrónica">Ingeniería Mecatrónica</option>
+                        <option value="TSU Automatización">TSU Automatización</option>
+                        <option value="TSU Robótica">TSU Robótica</option>
+                        <option value="Licenciatura en Negocios y Mercadotecnia">Licenciatura en Negocios y Mercadotecnia</option>
+                        <option value="TSU Mercadotecnia">TSU Mercadotecnia</option>
+                        <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                        <option value="TSU Automotriz">TSU Automotriz</option>
+                        <option value="TSU Maquinados de Precisión">TSU Maquinados de Precisión</option>
+                        <option value="TSU Moldeo de Plástico">TSU Moldeo de Plástico</option>
+                        <option value="Ingeniería en Mantenimiento Industrial">Ingeniería en Mantenimiento Industrial</option>
+                        <option value="TSU Mantenimiento a Maquinaria Pesada">TSU Mantenimiento a Maquinaria Pesada</option>
+                        <option value="TSU Mantenimiento Industrial">TSU Mantenimiento Industrial</option>
+                        <option value="Ingeniería en Tecnologías de la Información e Innovación Digital">Ingeniería en Tecnologías de la Información e Innovación Digital</option>
+                        <option value="TSU Entornos Virtuales y Negocios Digitales">TSU Entornos Virtuales y Negocios Digitales</option>
+                        <option value="TSU Desarrollo de Software Multiplataforma">TSU Desarrollo de Software Multiplataforma</option>
+                    </select>
                 </div>
 
                 <div class="form-group">

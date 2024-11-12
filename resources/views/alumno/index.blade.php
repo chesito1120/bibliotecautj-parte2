@@ -1,148 +1,27 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Lista de Alumnos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #ced4da;
-            text-align: left;
-            font-size: 16px;
-        }
-        th {
-            background-color: #f8f9fa;
-            color: #495057;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        .btn {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            text-decoration: none;
-            display: inline-block;
-            margin: 5px 0;
-        }
-        .btn-success {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-        }
-        .btn-info {
-            background-color: #17a2b8;
-            color: white;
-        }
-        .btn-warning {
-            background-color: #ffc107;
-            color: black;
-        }
-        .btn:hover {
-            opacity: 0.9;
-        }
-        .search-container {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .search-container input[type="text"] {
-            padding: 10px;
-            width: 70%;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .search-container button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .search-container button:hover {
-            opacity: 0.9;
-        }
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            list-style-type: none;
-            padding: 0;
-            margin: 20px 0;
-        }
-        .pagination button, .pagination a {
-            padding: 10px 15px;
-            border: 1px solid #007bff;
-            border-radius: 4px;
-            text-decoration: none;
-            color: #007bff;
-            font-size: 16px;
-            background-color: white;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-            margin: 0 5px;
-        }
-        .pagination button:hover, .pagination a:hover {
-            background-color: #007bff;
-            color: white;
-        }
-        .results-info {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 16px;
-            color: #333;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Lista de Alumnos</h2>
+@extends('adminlte::page')
 
-        <!-- Formulario de búsqueda -->
-        <div class="search-container">
-            <form action="{{ route('alumnos.index') }}" method="GET">
-                <input type="text" name="search" placeholder="Buscar por nombre o matrícula..." value="{{ request('search') }}">
-                <button type="submit">Buscar</button>
-            </form>
-        </div>
+@section('title', 'Lista de Estudiantes')
 
-        <!-- Tabla de alumnos -->
-        <table>
-            <thead>
-                <tr>
+@section('content')
+<div class="container">
+    <div class="col-12 text-center mb-4">
+        <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
+    </div>
+    <h2 class="text-center mb-4">Lista de Estudiantes</h2>
+
+         <!-- Formulario de búsqueda -->
+    <div class="search-container text-center mb-4">
+        <form action="{{ route('maestro.index') }}" method="GET" class="form-inline justify-content-center">
+            <input type="text" name="search" placeholder="Buscar por nombre" value="{{ request('search') }}" class="form-control mr-2 w-50">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+    </div>
+
+          <!-- Tabla de Docentes -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr class="text-center">
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Matrícula</th>
@@ -190,5 +69,4 @@
             <a href="{{ route('alumnos.create') }}" class="btn btn-success">Agregar Nuevo Alumno</a>
         </div>
     </div>
-</body>
-</html>
+@endsection

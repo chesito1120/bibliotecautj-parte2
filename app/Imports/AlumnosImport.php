@@ -12,7 +12,7 @@ class AlumnosImport implements ToModel, WithValidation
     public function model(array $row)
     {
         return new Alumno([
-           'matrícula' => $row[0],
+           'matricula' => $row[0],
             'nombre' => $row[1],
             'carrera' => $row[2],
             'grado' => $row[3],
