@@ -373,19 +373,19 @@ return [
         ],
         ['header' => 'labels'],
         [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
+            'text' => 'Carga de Docentes',
+            'icon_color' => 'green',
+            'url' => 'http://127.0.0.1:8000/maestros/upload',
         ],
         [
-            'text' => 'warning',
+            'text' => 'Carga de Estudiantes',
             'icon_color' => 'yellow',
-            'url' => '#',
+            'url' => 'http://127.0.0.1:8000/alumnos/upload',
         ],
         [
-            'text' => 'information',
+            'text' => 'Carga de Libros',
             'icon_color' => 'cyan',
-            'url' => '#',
+            'url' => 'http://127.0.0.1:8000/libros/upload',
         ],
     ],
 
