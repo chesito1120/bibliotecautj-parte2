@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->enum('tipo_usuario', ['alumno', 'maestro']);
             $table->enum('sexo', ['masculino', 'femenino']);
-            $table->string('carrera')->nullable(); 
+            $table->string('carrera')->nullable();
             $table->enum('turno', ['matutino', 'vespertino'])->nullable();
             $table->timestamps();
         });
@@ -26,22 +26,11 @@ return new class extends Migration
         // Tabla de visitas 
         Schema::create('visitas', function (Blueprint $table) {
             $table->id();
+            // Relación con la tabla de usuarios
             $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
             $table->enum('servicio', ['computo', 'acervo', 'prestamo']);
             $table->timestamp('fecha')->useCurrent();
             $table->timestamps();
-        });
-
-        // Tabla de carreras 
-        Schema::create('carreras', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre')->unique();
-            $table->timestamps();
-        });
-
-        // Actualizar la tabla de usuarios para referenciar a la tabla de carreras
-        Schema::table('usuarios', function (Blueprint $table) {
-            $table->foreignId('carrera_id')->nullable()->constrained('carreras');
         });
     }
 
@@ -50,12 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('usuarios', function (Blueprint $table) {
-            $table->dropForeign(['carrera_id']);
-            $table->dropColumn('carrera_id');
-        });
-
-        Schema::dropIfExists('carreras');
         Schema::dropIfExists('visitas');
         Schema::dropIfExists('usuarios');
     }

@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('maestros', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+            $table->integer('numero_empleado');
+            $table->string('carrera_ads');
+            $table->string('turno');
+            $table->string('sexo');
+            $table->string('puesto');
             $table->timestamps();
         });
     }
