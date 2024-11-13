@@ -6,32 +6,31 @@ use App\Models\Maestro;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class MaestrosImport implements ToModel, WithValidation
+class MaestrosImport implements ToModel, WithValidation, WithHeadingRow
 {
     public function model(array $row)
     {
         return new Maestro([
-           'nombre' => $row[0],
-            'numero_empleado' => $row[1],
-            'carrera_ads' => $row[2],
-            'turno' => $row[3],
-            'sexo' => $row[4],
-            'puesto' => $row[5],
+            'nombre' => $row['nombre'],
+            'numero_empleado' => $row['numero_empleado'],
+            'carrera_ads' => $row['carrera_ads'],
+            'turno' => $row['turno'],
+            'sexo' => $row['sexo'],
+            'puesto' => $row['puesto'],
         ]);
     }
-
 
     public function rules(): array
     {
         return [
-            '0' => 'required', 
-            '1' => 'required', 
-            '2' => 'required', 
-            '3' => 'required', 
-            '4' => 'required', 
-            '5' => 'required', 
-
+            'nombre' => 'required|string',
+            'numero_empleado' => 'required|integer|unique:maestros,numero_empleado',
+            'carrera_ads' => 'required|string',
+            'turno' => 'required|string',
+            'sexo' => 'required|string',
+            'puesto' => 'required|string',
         ];
     }
 }

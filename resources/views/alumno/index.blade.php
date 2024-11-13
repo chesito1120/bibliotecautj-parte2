@@ -8,6 +8,16 @@
         <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
     </div>
     <h2 class="text-center mb-4">Lista de Estudiantes</h2>
+@extends('adminlte::page')
+
+@section('title', 'Lista de Estudiantes')
+
+@section('content')
+<div class="container">
+    <div class="col-12 text-center mb-4">
+        <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
+    </div>
+    <h2 class="text-center mb-4">Lista de Estudiantes</h2>
 
          <!-- Formulario de búsqueda -->
     <div class="search-container text-center mb-4">
@@ -17,6 +27,11 @@
         </form>
     </div>
 
+          <!-- Tabla de Docentes -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr class="text-center">
           <!-- Tabla de Docentes -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
@@ -69,4 +84,5 @@
             <a href="{{ route('alumnos.create') }}" class="btn btn-success">Agregar Nuevo Alumno</a>
         </div>
     </div>
+@endsection
 @endsection
