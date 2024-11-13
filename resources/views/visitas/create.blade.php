@@ -63,6 +63,10 @@
             background-color: #d4edda;
             color: #155724;
         }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
         #prestamoForm {
             display: none;
         }
@@ -107,21 +111,17 @@
             <div id="prestamoForm">
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
-                    <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}">
+                    <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}" readonly>
                 </div>
 
                 <div class="form-group">
-                    <label for="sexo">Sexo</label>
-                    <select name="sexo" id="sexo">
-                        <option value="masculino" {{ old('sexo') == 'masculino' ? 'selected' : '' }}>Masculino</option>
-                        <option value="femenino" {{ old('sexo') == 'femenino' ? 'selected' : '' }}>Femenino</option>
-                        <option value="otro" {{ old('sexo') == 'otro' ? 'selected' : '' }}>Otro</option>
-                    </select>
+                    <label for="grado">Grado</label>
+                    <input type="text" name="grado" id="grado" value="{{ old('grado') }}" readonly>
                 </div>
 
                 <div class="form-group">
-                    <label for="grado">Grado y Grupo</label>
-                    <input type="text" name="grado" id="grado" value="{{ old('grado') }}">
+                    <label for="grupo">Grupo</label>
+                    <input type="text" name="grupo" id="grupo" value="{{ old('grupo') }}" readonly>
                 </div>
 
                 <div class="form-group">
@@ -148,7 +148,8 @@
 
                 <div class="form-group">
                     <label for="titulo_libro">Título del Libro</label>
-                    <input type="text" name="titulo_libro" id="titulo_libro" value="{{ old('titulo_libro') }}">
+                    <input type="text" id="titulo_libro" placeholder="Buscar libro">
+                    <div id="suggestions" style="display: none; border: 1px solid #ccc;"></div>
                 </div>
 
                 <div class="form-group">
@@ -181,49 +182,143 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function togglePrestamoForm() {
-            var servicio = document.getElementById('servicio').value;
-            var prestamoForm = document.getElementById('prestamoForm');
-            if (servicio === 'prestamo') {
-                prestamoForm.style.display = 'block';
-            } else {
-                prestamoForm.style.display = 'none';
-            }
-        }
+        $(document).ready(function() {
+        // Establecer la fecha de préstamo como la fecha actual
+        var today = new Date().toISOString().split('T')[0];  // Formato YYYY-MM-DD
+        $('#fecha_prestamo').val(today);
 
-        function toggleRenovacionFecha() {
-            var renovacion = document.getElementById('renovacion').value;
-            var fechaRenovacion = document.getElementById('fechaRenovacion');
-            if (renovacion === 'si') {
-                fechaRenovacion.style.display = 'block';
+        togglePrestamoForm();
+
+        $('#tipo_usuario').on('change', function() {
+            var tipoUsuario = $(this).val();
+            if (tipoUsuario === 'maestro') {
+                $('#grado').closest('.form-group').hide();
+                $('#grupo').closest('.form-group').hide();
+                $('#carrera').closest('.form-group').hide();
             } else {
-                fechaRenovacion.style.display = 'none';
+                $('#grado').closest('.form-group').show();
+                $('#grupo').closest('.form-group').show();
+                $('#carrera').closest('.form-group').show();
             }
-        }
+        });
+
+        // Mostrar formulario de préstamo cuando el servicio sea "Préstamo Externo"
+        $('#servicio').on('change', function() {
+            togglePrestamoForm();
+        });
 
         // AJAX para obtener los datos de la matrícula
-        $('#matricula').on('input', function() {
-            var matricula = $(this).val();
+        $('#matricula').on('change', function() {
+            var matricula = $(this).val().trim();
             if (matricula.length > 0) {
                 $.ajax({
                     url: '/visitas/usuario/' + matricula,
                     method: 'GET',
                     success: function(response) {
-                        if (response) {
-                            $('#nombre').val(response.nombre);
-                            $('#sexo').val(response.sexo);
-                            $('#grado').val(response.grado);
-                            $('#tipo_usuario').val(response.tipo_usuario);
-                            $('#carrera').val(response.carrera);
-                        }
+                        // Llenar los campos si la respuesta tiene datos
+                        $('#nombre').val(response.nombre);
+                        $('#grado').val(response.grado);
+                        $('#grupo').val(response.grupo);
+                        $('#carrera').val(response.carrera);
+                    },
+                    error: function() {
+                        // Limpiar los campos si la matrícula no es válida
+                        $('#nombre').val('');
+                        $('#grado').val('');
+                        $('#grupo').val('');
+                        $('#carrera').val('');
+                        alert('Usuario no encontrado. Verifique la matrícula.');
                     }
                 });
+            } else {
+                // Limpiar los campos si se borra el contenido de la matrícula
+                $('#nombre').val('');
+                $('#grado').val('');
+                $('#grupo').val('');
+                $('#carrera').val('');
+            }
+        });
+    });
+
+    // Función para mostrar u ocultar formulario de préstamo
+    function togglePrestamoForm() {
+        var servicio = $('#servicio').val();
+        if (servicio === 'prestamo') {
+            $('#prestamoForm').show();
+        } else {
+            $('#prestamoForm').hide();
+        }
+    }
+
+    // Mostrar fecha de renovación solo si se selecciona 'Sí'
+    function toggleRenovacionFecha() {
+        var renovacion = $('#renovacion').val();
+        if (renovacion === 'si') {
+            $('#fechaRenovacion').show();
+        } else {
+            $('#fechaRenovacion').hide();
+        }
+    }
+
+    </script>
+    
+    <script>
+    $(document).ready(function() {
+        $('#titulo_libro').on('input', function() {
+            var query = $(this).val();
+
+            if (query.length > 1) { // Empieza a buscar cuando haya al menos 2 caracteres
+                $.ajax({
+                    url: '/libros/buscar', // Ruta correcta para hacer la búsqueda
+                    method: 'GET',
+                    data: { query: query },
+                    success: function(response) {
+                        var suggestions = $('#suggestions');
+                        suggestions.empty(); // Limpiar las sugerencias anteriores
+
+                        if (response.length > 0) {
+                            response.forEach(function(libro) {
+                                // Crear un item de sugerencia con los datos del libro
+                                var suggestionItem = `
+                                    <div class="suggestion-item" style="padding: 8px; cursor: pointer;">
+                                        <strong>${libro.titulo}</strong><br>
+                                        Autor: ${libro.autor}<br>
+                                        No. de Clasificación: ${libro.no_clasificacion}
+                                    </div>
+                                `;
+                                suggestions.append(suggestionItem); // Añadir la sugerencia a la lista
+                            });
+                            suggestions.show(); // Mostrar las sugerencias
+                        } else {
+                            suggestions.hide(); // Ocultar sugerencias si no hay resultados
+                        }
+                    },
+                    error: function() {
+                        // En caso de error en la solicitud
+                        console.error('Error al realizar la búsqueda de libros.');
+                    }
+                });
+            } else {
+                $('#suggestions').hide(); // Ocultar sugerencias si el campo está vacío
             }
         });
 
-        // Ejecutar la función al cargar la página si ya hay un servicio seleccionado
-        togglePrestamoForm();
+        // Rellenar los campos al seleccionar una sugerencia
+        $(document).on('click', '.suggestion-item', function() {
+            var tituloSeleccionado = $(this).find('strong').text();
+            var autorSeleccionado = $(this).find('div').eq(1).text().replace('Autor: ', '');
+            var clasificacionSeleccionada = $(this).find('div').eq(2).text().replace('No. de Clasificación: ', '');
+
+            // Rellenar los campos con los datos del libro seleccionado
+            $('#titulo_libro').val(tituloSeleccionado);
+            $('#autor').val(autorSeleccionado);
+            $('#no_clasificacion').val(clasificacionSeleccionada);
+
+            // Ocultar las sugerencias después de seleccionar un libro
+            $('#suggestions').hide();
+        });
+    });
+
     </script>
-    <a href="{{ route('visitas.index') }}" class="btn btn-metricas">Ver Métricas</a>
 </body>
 </html>

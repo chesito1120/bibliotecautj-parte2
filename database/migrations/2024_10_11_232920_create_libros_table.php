@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateLibrosTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('libros', function (Blueprint $table) {
@@ -24,18 +19,13 @@ class CreateLibrosTable extends Migration
             $table->string('pag')->nullable();
             $table->string('isbn');
             $table->string('area_sumario')->nullable();
-            $table->string('donacion_compra'); 
-            $table->string('fecha_ingreso'); 
+            $table->string('donacion_compra');
+            $table->string('fecha_ingreso');
+            $table->boolean('disponible')->default(true); // Campo de disponibilidad
             $table->timestamps();
         });
-        
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('libros');

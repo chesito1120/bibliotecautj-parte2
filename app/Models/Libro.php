@@ -10,6 +10,22 @@ class Libro extends Model
     use HasFactory;
 
     protected $fillable = [
-        'clas_dewey', 'titulo', 'autor', 'editorial', 'edicion', 'area_conocimiento', 'pag', 'isbn', 'area_sumario', 'donacion_compra', 'fecha_ingreso'
+        'clas_dewey', 
+        'titulo', 
+        'autor', 
+        'editorial', 
+        'edicion', 
+        'area_conocimiento', 
+        'pag', 
+        'isbn', 
+        'area_sumario', 
+        'donacion_compra', 
+        'fecha_ingreso',
+        'disponibilidad'
     ];
+
+    public function prestamos()
+    {
+        return $this->hasMany(Prestamo::class);
+    }
 }
