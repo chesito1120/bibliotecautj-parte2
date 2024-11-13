@@ -157,22 +157,6 @@ class LibroController extends Controller
         $libro->delete();
 
         return redirect()->route('libros.index')->with('success', 'Libro eliminado exitosamente.');
-    }
-
-    // Método para realizar la búsqueda de libros
-    public function buscar(Request $request)
-    {
-        $query = $request->input('query');
-
-        // Buscar libros que contengan el texto en el título
-        $libros = Libro::where('titulo', 'like', '%' . $query . '%')
-                       ->orWhere('autor', 'like', '%' . $query . '%')
-                       ->get(['titulo', 'autor', 'no_clasificacion']); // Puedes agregar más campos si lo deseas
-
-        // Retornar los resultados como JSON
-        return response()->json($libros);
-    }
-        
-
+    }    
 
 }
