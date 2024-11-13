@@ -11,7 +11,7 @@
             </div>
             
             <!-- Formulario -->
-            <form action="{{ route('maestro.store') }}" method="POST" class="col-lg-7 mx-auto">
+            <form action="{{ route('libros.upload') }}" method="POST" class="col-lg-7 mx-auto">
                 @csrf
 
                 <!-- Mensaje de éxito -->
