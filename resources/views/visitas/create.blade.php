@@ -115,11 +115,19 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="sexo">Sexo</label>
+                    <select name="sexo" id="sexo">
+                        <option value="masculino" {{ old('sexo') == 'masculino' ? 'selected' : '' }}>Masculino</option>
+                        <option value="femenino" {{ old('sexo') == 'femenino' ? 'selected' : '' }}>Femenino</option>
+                        <option value="otro" {{ old('sexo') == 'otro' ? 'selected' : '' }}>Otro</option>
+                    </select>
                     <label for="grado">Grado</label>
                     <input type="text" name="grado" id="grado" value="{{ old('grado') }}" readonly>
                 </div>
 
                 <div class="form-group">
+                    <label for="grado">Grado y Grupo</label>
+                    <input type="text" name="grado" id="grado" value="{{ old('grado') }}">
                     <label for="grupo">Grupo</label>
                     <input type="text" name="grupo" id="grupo" value="{{ old('grupo') }}" readonly>
                 </div>
@@ -186,9 +194,7 @@
         // Establecer la fecha de préstamo como la fecha actual
         var today = new Date().toISOString().split('T')[0];  // Formato YYYY-MM-DD
         $('#fecha_prestamo').val(today);
-
         togglePrestamoForm();
-
         $('#tipo_usuario').on('change', function() {
             var tipoUsuario = $(this).val();
             if (tipoUsuario === 'maestro') {
@@ -201,12 +207,10 @@
                 $('#carrera').closest('.form-group').show();
             }
         });
-
         // Mostrar formulario de préstamo cuando el servicio sea "Préstamo Externo"
         $('#servicio').on('change', function() {
             togglePrestamoForm();
         });
-
         // AJAX para obtener los datos de la matrícula
         $('#matricula').on('change', function() {
             var matricula = $(this).val().trim();
@@ -239,7 +243,6 @@
             }
         });
     });
-
     // Función para mostrar u ocultar formulario de préstamo
     function togglePrestamoForm() {
         var servicio = $('#servicio').val();
@@ -249,7 +252,6 @@
             $('#prestamoForm').hide();
         }
     }
-
     // Mostrar fecha de renovación solo si se selecciona 'Sí'
     function toggleRenovacionFecha() {
         var renovacion = $('#renovacion').val();
@@ -259,14 +261,12 @@
             $('#fechaRenovacion').hide();
         }
     }
-
     </script>
     
     <script>
     $(document).ready(function() {
         $('#titulo_libro').on('input', function() {
             var query = $(this).val();
-
             if (query.length > 1) { // Empieza a buscar cuando haya al menos 2 caracteres
                 $.ajax({
                     url: '/libros/buscar', // Ruta correcta para hacer la búsqueda
@@ -275,7 +275,6 @@
                     success: function(response) {
                         var suggestions = $('#suggestions');
                         suggestions.empty(); // Limpiar las sugerencias anteriores
-
                         if (response.length > 0) {
                             response.forEach(function(libro) {
                                 // Crear un item de sugerencia con los datos del libro
@@ -302,23 +301,22 @@
                 $('#suggestions').hide(); // Ocultar sugerencias si el campo está vacío
             }
         });
-
         // Rellenar los campos al seleccionar una sugerencia
         $(document).on('click', '.suggestion-item', function() {
             var tituloSeleccionado = $(this).find('strong').text();
             var autorSeleccionado = $(this).find('div').eq(1).text().replace('Autor: ', '');
             var clasificacionSeleccionada = $(this).find('div').eq(2).text().replace('No. de Clasificación: ', '');
-
             // Rellenar los campos con los datos del libro seleccionado
             $('#titulo_libro').val(tituloSeleccionado);
             $('#autor').val(autorSeleccionado);
             $('#no_clasificacion').val(clasificacionSeleccionada);
-
             // Ocultar las sugerencias después de seleccionar un libro
             $('#suggestions').hide();
         });
     });
-
     </script>
+    
+    
+    <a href="{{ route('visitas.index') }}" class="btn btn-metricas">Ver Métricas</a>
 </body>
 </html>

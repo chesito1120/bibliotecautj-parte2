@@ -4,6 +4,9 @@
 
 @section('content')
 <div class="container">
+    <div class="col-12 text-center mb-4">
+        <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
+    </div>
     <h2 class="text-center mb-4">Lista de Docentes</h2>
 
     <!-- Formulario de búsqueda -->
@@ -17,7 +20,7 @@
     <!-- Tabla de Docentes -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
-            <thead class="thead-light">
+            <thead class="thead-dark">
                 <tr class="text-center">
                     <th>ID</th>
                     <th>Nombre</th>
