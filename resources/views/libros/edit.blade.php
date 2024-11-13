@@ -8,9 +8,10 @@
         <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 500px;">
     </div>
     
-    <!-- Formulario -->
+    <!-- Formulario de actualización -->
     <div class="card shadow-lg p-4" style="max-width: 600px; margin: auto;">
-        <form action="{{ route('maestro.store') }}" method="POST">
+        <form action="{{ route('libros.update', $libro->id) }}" method="POST">
+            @method('PUT') <!-- Indica que se trata de una actualización -->
             @csrf
 
             <!-- Mensaje de éxito -->
@@ -31,6 +32,7 @@
                 </div>
             @endif
 
+            <!-- Campos del formulario -->
             <div class="form-group mb-3">
                 <label for="clas_dewey">Clas. Dewey</label>
                 <input type="text" class="form-control" name="clas_dewey" id="clas_dewey" value="{{ $libro->clas_dewey }}" required>
@@ -53,7 +55,7 @@
 
             <div class="form-group mb-3">
                 <label for="edicion">Edición</label>
-                <input type="text" class="form-control" name="edicion" id="edicion" value="{{ $libro->edicion }}" required>
+                <input type="text" class="form-control" name="edicion" id="edicion" value="{{ $libro->edicion }}">
             </div>
 
             <div class="form-group mb-3">
@@ -63,7 +65,7 @@
 
             <div class="form-group mb-3">
                 <label for="pag">Páginas</label>
-                <input type="number" class="form-control" name="pag" id="pag" value="{{ $libro->pag }}" required>
+                <input type="number" class="form-control" name="pag" id="pag" value="{{ $libro->pag }}">
             </div>
 
             <div class="form-group mb-3">
@@ -73,7 +75,7 @@
 
             <div class="form-group mb-3">
                 <label for="area_sumario">Área de Sumario</label>
-                <input type="text" class="form-control" name="area_sumario" id="area_sumario" value="{{ $libro->area_sumario }}" required>
+                <input type="text" class="form-control" name="area_sumario" id="area_sumario" value="{{ $libro->area_sumario }}">
             </div>
 
             <div class="form-group mb-3">
@@ -86,6 +88,7 @@
                 <input type="date" class="form-control" name="fecha_ingreso" id="fecha_ingreso" value="{{ $libro->fecha_ingreso }}" required>
             </div>
 
+            <!-- Botones de acción -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-success me-2">Actualizar Libro</button>
                 <a href="{{ route('libros.index') }}" class="btn btn-danger">Cancelar</a>

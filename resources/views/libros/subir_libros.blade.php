@@ -7,11 +7,10 @@
             <!-- Logo y Título -->
             <div class="col-12 text-center mb-4">
                 <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
-            
             </div>
             
             <!-- Formulario -->
-            <form action="{{ route('libros.upload') }}" method="POST" class="col-lg-7 mx-auto">
+            <form action="{{ route('libros.upload') }}" method="POST" class="col-lg-7 mx-auto" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Mensaje de éxito -->
@@ -32,35 +31,18 @@
                     </div>
                 @endif
 
-    <div class="container">
-        <h2>Subir Libros desde CSV</h2>
-        <hr>
+                <h2>Subir Libros desde CSV</h2>
+                <hr>
 
-        <!-- Mensaje de éxito -->
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+                <div class="form-group">
+                    <label for="file">Seleccionar archivo CSV:</label>
+                    <input type="file" name="file" id="file" required>
+                </div>
 
-        <!-- Mensaje de error -->
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <!-- Formulario para cargar CSV -->
-        <form action="{{ route('libros.upload') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group">
-                <label for="file">Seleccionar archivo CSV:</label>
-                <input type="file" name="file" id="file" required>
-            </div>
-
-            <button type="submit" class="btn btn-success">Subir CSV</button>
-            <a href="/libros" class="btn btn-danger">Cancelar</a>
-        </form>
+                <button type="submit" class="btn btn-success">Subir CSV</button>
+                <a href="/" class="btn btn-danger">Cancelar</a>
+            </form>
+        </div>
     </div>
 
 @endsection

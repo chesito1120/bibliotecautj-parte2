@@ -55,7 +55,7 @@ class LibroController extends Controller
                     'area_sumario' => $row[8] ?? null,
                     'donacion_compra' => $row[9] ?? null,
                     'fecha_ingreso' => $row[10] ?? null,
-                    'disponible' => true, // Agregado: el libro es disponible por defecto
+                    'disponible' => true,
                 ];
 
                 Libro::create($libroData);
@@ -164,12 +164,10 @@ class LibroController extends Controller
     {
         $query = $request->input('query');
 
-        // Buscar libros que contengan el texto en el título
         $libros = Libro::where('titulo', 'like', '%' . $query . '%')
                        ->orWhere('autor', 'like', '%' . $query . '%')
-                       ->get(['titulo', 'autor', 'no_clasificacion']); // Puedes agregar más campos si lo deseas
+                       ->get(['titulo', 'autor', 'no_clasificacion']);
 
-        // Retornar los resultados como JSON
         return response()->json($libros);
     }
         
