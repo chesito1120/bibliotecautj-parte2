@@ -4,22 +4,13 @@
 
 @section('content')
 <div class="container">
-    <div class="col-12 text-center mb-4">
-        <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
-    </div>
-    <h2 class="text-center mb-4">Lista de Estudiantes</h2>
-@extends('adminlte::page')
-
-@section('title', 'Lista de Estudiantes')
-
-@section('content')
-<div class="container">
+    <!-- Logo y título -->
     <div class="col-12 text-center mb-4">
         <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
     </div>
     <h2 class="text-center mb-4">Lista de Estudiantes</h2>
 
-         <!-- Formulario de búsqueda -->
+    <!-- Formulario de búsqueda -->
     <div class="search-container text-center mb-4">
         <form action="{{ route('alumnos.index') }}" method="GET" class="form-inline justify-content-center">
             <input type="text" name="search" placeholder="Buscar por nombre" value="{{ request('search') }}" class="form-control mr-2 w-50">
@@ -27,12 +18,7 @@
         </form>
     </div>
 
-          <!-- Tabla de Docentes -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead class="thead-dark">
-                <tr class="text-center">
-          <!-- Tabla de Docentes -->
+    <!-- Tabla de estudiantes -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
@@ -51,7 +37,7 @@
                         <td>{{ $alumno->nombre }}</td>
                         <td>{{ $alumno->matricula }}</td>
                         <td>{{ $alumno->carrera }}</td>
-                        <td>
+                        <td class="text-center">
                             <a href="{{ route('alumnos.show', $alumno) }}" class="btn btn-info">Ver</a>
                             <a href="{{ route('alumnos.edit', $alumno) }}" class="btn btn-warning">Editar</a>
                             <form action="{{ route('alumnos.destroy', $alumno) }}" method="POST" style="display:inline;">
@@ -63,16 +49,18 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" style="text-align:center;">No se encontraron alumnos</td>
+                        <td colspan="5" class="text-center">No se encontraron alumnos</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
 
-        <!-- Mensaje de resultados -->
-        <div class="results-info">
-            Mostrando {{ $alumnos->firstItem() }} a {{ $alumnos->lastItem() }} de {{ $alumnos->total() }} resultados
-        </div>
+        <!-- Información de resultados -->
+        @if($alumnos->total() > 0)
+            <div class="results-info text-center mb-3">
+                Mostrando {{ $alumnos->firstItem() }} a {{ $alumnos->lastItem() }} de {{ $alumnos->total() }} resultados
+            </div>
+        @endif
 
         <!-- Paginación -->
         <div class="pagination-container">
@@ -80,9 +68,9 @@
         </div>
 
         <!-- Botón para agregar nuevo alumno -->
-        <div style="text-align: center;">
+        <div class="text-center mt-4">
             <a href="{{ route('alumnos.create') }}" class="btn btn-success">Agregar Nuevo Alumno</a>
         </div>
     </div>
-@endsection
+</div>
 @endsection
