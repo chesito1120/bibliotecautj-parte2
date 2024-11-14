@@ -7,7 +7,7 @@
             <!-- Logo y Título -->
             <div class="col-12 text-center mb-4">
                 <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
-                <h2 style="color: #2F4F4F;">Agregar Nuevo Docente</h2>
+      
             </div>
             
             <!-- Formulario -->
