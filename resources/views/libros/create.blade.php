@@ -3,6 +3,7 @@
 @section('content')
 
     <div class="container">
+<<<<<<< HEAD
         <div class="row">
             <!-- Logo y Título -->
             <div class="col-12 text-center mb-4">
@@ -32,6 +33,8 @@
                 @endif
 
     <div class="container">
+=======
+>>>>>>> d75bf71325fbf37c33b4ddc020265027e9760974
         <h2>Agregar Libro</h2>
         <hr>
 
@@ -71,6 +74,10 @@
             <div class="form-group">
                 <label for="edicion">Edición:</label>
                 <input type="text" name="edicion" id="edicion" required>
+            </div>
+            <div class="form-group">
+                <label for="edicion">Class Dewey:</label>
+                <input type="text" name="clas_dewey" id="clas_dewey" required>
             </div>
             <div class="form-group">
                 <label for="area_conocimiento">Área de Conocimiento:</label>

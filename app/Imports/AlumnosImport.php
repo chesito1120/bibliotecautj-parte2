@@ -20,6 +20,7 @@ class AlumnosImport implements ToModel, WithValidation
             'turno' => $row[5],
             'sexo' => $row[6],
             'mail_institucional' => $row[7],
+            'tipo_usuario' => $row[8],
 
         ]);
     }
@@ -35,8 +36,7 @@ class AlumnosImport implements ToModel, WithValidation
             '5' => 'required', // turno
             '6' => 'required', // turno
             '7' => 'required', // turno
-
-
+            '8' => 'required', // turno
         ];
     }
 }

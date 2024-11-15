@@ -19,6 +19,7 @@ class MaestrosImport implements ToModel, WithValidation, WithHeadingRow
             'turno' => $row['turno'],
             'sexo' => $row['sexo'],
             'puesto' => $row['puesto'],
+            'tipo_usuario' => $row['tipo_usuario'],
         ]);
     }
 
@@ -31,6 +32,7 @@ class MaestrosImport implements ToModel, WithValidation, WithHeadingRow
             'turno' => 'required|string',
             'sexo' => 'required|string',
             'puesto' => 'required|string',
+            'tipo_usuario' => 'required|string',
         ];
     }
 }

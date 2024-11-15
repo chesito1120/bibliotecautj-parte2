@@ -3,37 +3,6 @@
 @section('content')
 
     <div class="container">
-        <div class="row">
-            <!-- Logo y Título -->
-            <div class="col-12 text-center mb-4">
-                <img src="{{ asset('images/Logo-UTJ-Verde.png') }}" alt="Logo" style="max-width: 950px;">
-      
-            </div>
-            
-            <!-- Formulario -->
-            <form action="{{ route('maestro.store') }}" method="POST" class="col-lg-7 mx-auto">
-                @csrf
-
-                <!-- Mensaje de éxito -->
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                <!-- Mensaje de error -->
-                @if($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-
-    <div class="container">
         <h2>Agregar Alumno</h2>
         <hr>
 
