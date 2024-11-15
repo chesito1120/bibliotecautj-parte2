@@ -38,12 +38,12 @@
             <p><strong>Carrera Asignada:</strong> {{ $maestro->carrera_ads ?? 'N/A' }}</p>
             <p><strong>Turno:</strong> {{ $maestro->turno ?? 'N/A' }}</p>
             <p><strong>Sexo:</strong> {{ $maestro->sexo ?? 'N/A' }}</p>
-            <p><strong>Puesto:</strong> {{ $maestro->puesto ?? 'N/A' }}</p>
+            <p><strong>Nombramiento:</strong> {{ $maestro->puesto ?? 'N/A' }}</p>
         </div>
 
         <!-- Botones de Acción -->
         <div class="text-center mt-4">
-            <a href="{{ route('maestro.show', $maestro) }}" class="btn btn-primary">Editar</a>
+            <a href="{{ route('maestro.edit', $maestro) }}" class="btn btn-primary">Editar</a>
 
             <form action="{{ route('maestro.destroy', $maestro) }}" method="POST" style="display:inline;">
                 @csrf

@@ -315,13 +315,7 @@ return [
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
-        [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label' => 4,
-            'label_color' => 'success',
-        ],
+       
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
@@ -334,41 +328,60 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text' => 'multilevel',
+            'text' => 'Acciones',
             'icon' => 'fas fa-fw fa-share',
             'submenu' => [
+               
                 [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'level_one',
+                    'text' => 'Docentes',
                     'url' => '#',
                     'submenu' => [
                         [
-                            'text' => 'level_two',
-                            'url' => '#',
+                            'text' => 'carga de Docentes',
+                            'url' => 'http://127.0.0.1:8000/maestros/upload',
                         ],
                         [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
+                            'text' => 'Lista de Docentes',
+                            'url' => 'http://127.0.0.1:8000/maestros/',
                         ],
+                        
                     ],
                 ],
+
+
                 [
-                    'text' => 'level_one',
+                    'text' => 'Estudiantes',
                     'url' => '#',
+                    'submenu' => [
+                        [
+                            'text' => 'Carga de Estudiantes',
+                            'url' => 'http://127.0.0.1:8000/alumnos/upload',
+                        ],
+                        [
+                            'text' => 'Lista de Estudiantes',
+                            'url' => 'http://127.0.0.1:8000/alumnos/',
+                        ],
+                        
+                    ],
                 ],
+
+                [
+                    'text' => 'Libros',
+                    'url' => '#',
+                    'submenu' => [
+                        [
+                            'text' => 'Carga de Libros',
+                            'url' => 'http://127.0.0.1:8000/libros/upload',
+                        ],
+                        [
+                            'text' => 'Lista de Libros',
+                            'url' => 'http://127.0.0.1:8000/libros/',
+                        ],
+                        
+                    ],
+                ],
+
+
             ],
         ],
         ['header' => 'labels'],
@@ -377,16 +390,49 @@ return [
             'icon_color' => 'green',
             'url' => 'http://127.0.0.1:8000/maestros/upload',
         ],
+
+        [
+            'text' => 'Lista de Docentes',
+            'icon_color' => 'green',
+            'url' => 'http://127.0.0.1:8000/maestros/',
+        ],
+
+
+
+
         [
             'text' => 'Carga de Estudiantes',
             'icon_color' => 'yellow',
             'url' => 'http://127.0.0.1:8000/alumnos/upload',
         ],
+
+        [
+            'text' => 'Listado de Estudiantes',
+            'icon_color' => 'yellow',
+            'url' => 'http://127.0.0.1:8000/alumnos/',
+        ],
+
+
         [
             'text' => 'Carga de Libros',
             'icon_color' => 'cyan',
             'url' => 'http://127.0.0.1:8000/libros/upload',
         ],
+
+        [
+            'text' => 'listado de libros',
+            'icon_color' => 'cyan',
+            'url' => 'http://127.0.0.1:8000/libros/',
+        ],
+
+
+
+
+
+
+
+
+
     ],
 
     /*

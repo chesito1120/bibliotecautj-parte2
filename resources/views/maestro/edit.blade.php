@@ -48,7 +48,6 @@
                 <label for="carrera_ads" style="color: #2C6E49;">Carrera Asignada:</label>
                 <select class="form-control border border-success" id="carrera_ads" name="carrera_ads" required>
                     <option value="">Seleccione su carrera</option>
-                    <option value="">Seleccione su carrera</option>
                     <option value="Licenciatura en Administración">Licenciatura en Administración</option>
                     <option value="TSU Gestión del Capital Humano">TSU Gestión del Capital Humano</option>
                     <option value="Ingeniería Ambiental y Sustentabilidad">Ingeniería Ambiental y Sustentabilidad</option>
@@ -81,6 +80,7 @@
                     <option value="">Seleccione su turno</option>
                     <option value="Matutino">Matutino</option>
                     <option value="Vespertino">Vespertino</option>
+                    <option value="Mixto">Mixto</option>
                 </select>
             </div>
 
@@ -94,11 +94,11 @@
             </div>
 
             <div class="form-group">
-                <label for="puesto" style="color: #2C6E49;">Puesto que desempeña:</label>
+                <label for="puesto" style="color: #2C6E49;">Nombramiento:</label>
                 <select class="form-control border border-success" id="puesto" name="puesto" required>
-                    <option value="">Seleccione su sexo</option>
-                    <option value="Profesores de Asignatura">Profesores de Asignatura</option>
-                    <option value="Profesores de Tiempo Completo">Profesores de Tiempo Completo</option>
+                    <option value="">Seleccione su nombramiento</option>
+                    <option value="Profesores de Asignatura">Profesores de Asignatura PA </option>
+                    <option value="Profesores de Tiempo Completo">Profesores de Tiempo Completo PTC</option>
                 </select>
             </div>
 
