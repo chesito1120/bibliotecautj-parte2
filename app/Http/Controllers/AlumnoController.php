@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\AlumnosImport;
-use App\Models\Alumno; 
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Alumno;
 use Illuminate\Http\Request;
 
 class AlumnoController extends Controller
@@ -12,7 +10,7 @@ class AlumnoController extends Controller
     // Método para mostrar el formulario de carga de CSV
     public function showUploadForm()
     {
-        return view('alumno.subir_alumnos'); // Cambia la referencia a la vista correcta
+        return view('alumno.subir_alumnos');
     }
 
     // Método para manejar la carga del archivo CSV
@@ -33,6 +31,7 @@ class AlumnoController extends Controller
         }
     }
 
+    // Método para listar los alumnos con búsqueda
     public function index(Request $request)
     {
         // Recoge el valor del parámetro 'search' de la solicitud (si existe)
@@ -52,15 +51,16 @@ class AlumnoController extends Controller
         return view('alumno.index', compact('alumnos'));
     }
 
+    // Método para mostrar el formulario para agregar un nuevo alumno
     public function create()
     {
-        // Muestra el formulario para crear un nuevo alumno
         return view('alumno.create');
     }
 
+    // Método para almacenar un nuevo alumno
     public function store(Request $request)
     {
-        // Validar la solicitud
+        // Validación de la solicitud
         $request->validate([
             'matricula' => 'required|integer|unique:alumnos',
             'nombre' => 'required|string|max:255',
@@ -72,24 +72,30 @@ class AlumnoController extends Controller
             'mail_institucional' => 'required|string|email|max:255',
         ]);
 
-        // Crear un nuevo alumno
-        Alumno::create($request->all());
+        // Asegurarse de que tipo_usuario tenga el valor "Estudiante"
+        $data = $request->all();
+        // Si el campo tipo_usuario no se proporciona, lo asignamos a "Estudiante"
+        $data['tipo_usuario'] = $data['tipo_usuario'] ?? 'Estudiante';
+
+        // Crear el alumno
+        Alumno::create($data);
 
         return redirect()->route('alumno.index')->with('success', 'Alumno creado exitosamente.');
     }
 
+    // Método para mostrar los detalles de un alumno
     public function show(Alumno $alumno)
     {
-        // Muestra un alumno específico
         return view('alumno.show', compact('alumno'));
     }
 
+    // Método para mostrar el formulario de edición de un alumno
     public function edit(Alumno $alumno)
     {
-        // Muestra el formulario para editar un alumno
         return view('alumno.edit', compact('alumno'));
     }
 
+    // Método para actualizar un alumno
     public function update(Request $request, Alumno $alumno)
     {
         $request->validate([
@@ -102,36 +108,37 @@ class AlumnoController extends Controller
             'sexo' => 'required',
             'mail_institucional' => 'required|email',
         ]);
-    
-        // Actualiza los datos del alumno
-        $alumno->update($request->all());
-    
-        return redirect()->route('alumnos.index')->with('success', 'Alumno actualizado correctamente.');
+
+        // Asegurarse de que tipo_usuario tenga el valor "Estudiante"
+        $data = $request->all();
+        $data['tipo_usuario'] = $data['tipo_usuario'] ?? 'Estudiante';
+
+        // Actualizar el alumno
+        $alumno->update($data);
+
+        return redirect()->route('alumno.index')->with('success', 'Alumno actualizado correctamente.');
     }
 
+    // Método para eliminar un alumno
     public function destroy(Alumno $alumno)
     {
-        // Eliminar un alumno
+        // Eliminar el alumno
         $alumno->delete();
 
-        return redirect()->route('alumnos.index')->with('success', 'Alumno eliminado exitosamente.');
+        return redirect()->route('alumno.index')->with('success', 'Alumno eliminado exitosamente.');
     }
 
-    // Método para importar desde un CSV
+    // Método para importar alumnos desde un CSV
     public function import(Request $request)
     {
-        // Validación del archivo CSV
         $request->validate([
             'file' => 'required|mimes:csv,txt|max:2048',
         ]);
 
-        // Cargar el archivo
         $file = $request->file('file');
-
-        // Abrir el archivo y leer el contenido
         $handle = fopen($file, 'r');
+
         if ($handle) {
-            // Saltar la primera fila si es un encabezado
             $firstRow = true;
             while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 if ($firstRow) {
@@ -139,13 +146,11 @@ class AlumnoController extends Controller
                     continue;
                 }
 
-                // Verificar si los campos requeridos están vacíos
                 if (empty($row[0]) || empty($row[1]) || empty($row[2])) {
-                    // Si faltan campos requeridos, saltar esta fila
                     continue;
                 }
 
-                // Guardar los datos del alumno
+                // Asignar tipo_usuario "Estudiante"
                 $alumnoData = [
                     'matricula' => $row[0],
                     'nombre' => $row[1],
@@ -155,9 +160,10 @@ class AlumnoController extends Controller
                     'turno' => $row[5],
                     'sexo' => $row[6],
                     'mail_institucional' => $row[7],
+                    'tipo_usuario' => 'Estudiante', // Asignación predeterminada
                 ];
 
-                // Crear el registro del alumno
+                // Crear el alumno
                 Alumno::create($alumnoData);
             }
             fclose($handle);

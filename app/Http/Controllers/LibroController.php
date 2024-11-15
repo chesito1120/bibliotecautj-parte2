@@ -100,7 +100,7 @@ class LibroController extends Controller
             'area_sumario' => 'nullable|string',
             'donacion_compra' => 'required|string',
             'fecha_ingreso' => 'required|string',
-            'disponible' => 'boolean', // Validación del nuevo campo
+            'disponible' => 'boolean',
         ]);
 
         $libroData = $request->all();

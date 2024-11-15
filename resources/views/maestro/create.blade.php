@@ -88,7 +88,7 @@
                 </div>
 
                 <!-- Botones -->
-                <a href="{{ route('maestros.create') }}" class="btn" style="background-color: #556B2F; color: white; margin-right: 10px;">Cancelar</a>
+                <a href="{{ route('maestro.index') }}" class="btn" style="background-color: #556B2F; color: white; margin-right: 10px;">Cancelar</a>
                 <button type="submit" class="btn" style="background-color: #6B8E23; color: white;">Agregar Docente</button>
             </form>
         </div>

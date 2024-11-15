@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('turno');
             $table->string('sexo');
             $table->string('mail_institucional');
+            $table->string('tipo_usuario')->default('Estudiante');
             $table->timestamps();
         });
     }

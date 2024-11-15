@@ -19,7 +19,8 @@ class Alumno extends Model
         'grupo',
         'turno',
         'sexo',
-        'mail_institucional'
+        'mail_institucional',
+        'tipo_usuario',
     ];    
 }
 
