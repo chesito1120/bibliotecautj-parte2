@@ -60,8 +60,10 @@ Route::get('/libros/{libro}/edit', [LibroController::class, 'edit'])->name('libr
 Route::put('/libros/{libro}', [LibroController::class, 'update'])->name('libros.update');
 Route::delete('/libros/{libro}', [LibroController::class, 'destroy'])->name('libros.destroy');
 
-// CRUD alumnos (Eliminar la ruta redundante)
+// CRUD alumnos 
 Route::resource('/alumnos', AlumnoController::class);  // Esto genera todas las rutas para el recurso de alumnos
+
+Route::get('/libros/buscar', [LibroController::class, 'buscar'])->name('libros.buscar');
 
 // Ruta para obtener datos del usuario por matrícula (alumno o maestro)
 Route::get('/visitas/usuario/{matricula}', function ($matricula) {

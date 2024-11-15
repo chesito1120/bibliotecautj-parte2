@@ -163,14 +163,16 @@ class LibroController extends Controller
     public function buscar(Request $request)
     {
         $query = $request->input('query');
+        \Log::info("Buscando libros con la consulta: " . $query); // Log para depuración
 
-        $libros = Libro::where('titulo', 'like', '%' . $query . '%')
-                       ->orWhere('autor', 'like', '%' . $query . '%')
-                       ->get(['titulo', 'autor', 'no_clasificacion']);
+        $libros = Libro::buscar($query);
+
+        if ($libros->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron libros'], 404);
+        }
 
         return response()->json($libros);
     }
-        
 
 
 }

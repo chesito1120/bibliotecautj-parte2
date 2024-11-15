@@ -24,6 +24,13 @@ class Libro extends Model
         'disponibilidad'
     ];
 
+    public static function buscar($query)
+    {
+        return Libro::where('titulo', 'like', "%{$query}%")
+                    ->orWhere('autor', 'like', "%{$query}%")
+                    ->get(); // Devuelve los resultados de búsqueda
+    }
+
     public function prestamos()
     {
         return $this->hasMany(Prestamo::class);
