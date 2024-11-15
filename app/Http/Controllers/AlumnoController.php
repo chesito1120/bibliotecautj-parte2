@@ -80,7 +80,7 @@ class AlumnoController extends Controller
         // Crear el alumno
         Alumno::create($data);
 
-        return redirect()->route('alumno.index')->with('success', 'Alumno creado exitosamente.');
+        return redirect()->route('alumnos.index')->with('success', 'Alumno creado exitosamente.');
     }
 
     // Método para mostrar los detalles de un alumno
@@ -116,7 +116,7 @@ class AlumnoController extends Controller
         // Actualizar el alumno
         $alumno->update($data);
 
-        return redirect()->route('alumno.index')->with('success', 'Alumno actualizado correctamente.');
+        return redirect()->route('alumnos.index')->with('success', 'Alumno actualizado correctamente.');
     }
 
     // Método para eliminar un alumno
@@ -125,7 +125,7 @@ class AlumnoController extends Controller
         // Eliminar el alumno
         $alumno->delete();
 
-        return redirect()->route('alumno.index')->with('success', 'Alumno eliminado exitosamente.');
+        return redirect()->route('alumnos.index')->with('success', 'Alumno eliminado exitosamente.');
     }
 
     // Método para importar alumnos desde un CSV

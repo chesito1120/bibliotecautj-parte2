@@ -65,8 +65,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="grado">Grado y Grupo</label>
+                        <label for="grado">Grado</label>
                         <input type="text" name="grado" id="grado" class="form-control" value="{{ old('grado') }}"readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="grado">Grupo</label>
+                        <input type="text" name="grupo" id="grupo" class="form-control" value="{{ old('grupo') }}"readonly>
                     </div>
 
                     <div class="form-group">
@@ -76,10 +80,11 @@
 
                     <div class="form-group">
                         <label for="tipo_usuario">Tipo de Usuario</label>
-                        <select name="tipo_usuario" id="tipo_usuario" class="form-control">
+                        {{-- <select name="tipo_usuario" id="tipo_usuario" class="form-control">
                             <option value="alumno" {{ old('tipo_usuario') == 'alumno' ? 'selected' : '' }}>Alumno</option>
                             <option value="maestro" {{ old('tipo_usuario') == 'maestro' ? 'selected' : '' }}>Maestro</option>
-                        </select>
+                        </select> --}}
+                        <input type="text" name="tipo_usuario" id="tipo_usuario" class="form-control" value="{{ old('tipo_usuario') }}" readonly>
                     </div>
 
                     <div class="form-group">
@@ -200,6 +205,7 @@
                             $('#grupo').val(response.grupo);
                             $('#carrera').val(response.carrera);
                             $('#sexo').val(response.sexo);
+                            $('#tipo_usuario').val(response.tipo_usuario);
                         },
                         error: function() {
                             $('#matricula').val('');
@@ -208,6 +214,7 @@
                             $('#grupo').val('');
                             $('#carrera').val('');
                             $('#sexo').val('');
+                            $('#tipo_usuario').val('');
                             alert('Usuario no encontrado. Redirigiendo a la página de registro...');
                             window.location.href = '/alumnos/create';
                         }

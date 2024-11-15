@@ -152,4 +152,11 @@ class VisitaController extends Controller
     {
         //
     }
+
+    public static function buscar($query)
+    {
+        return Libro::where('titulo', 'like', "%{$query}%")
+                    ->orWhere('autor', 'like', "%{$query}%")
+                    ->get(); // Devuelve los resultados de búsqueda
+    }
 }
