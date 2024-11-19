@@ -427,6 +427,11 @@ return [
             'icon_color' => 'with',
             'url' => 'http://127.0.0.1:8000/visitas/acreate',
         ],
+        [
+            'text' => 'Metricas Generales',
+            'icon_color' => 'purple',
+            'url' => 'http://127.0.0.1:8000/visitas',
+        ],
 
 
 

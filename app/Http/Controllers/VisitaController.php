@@ -14,47 +14,102 @@ class VisitaController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        // Total de visitas
-        $total_visitas = Visita::count();
+{
+    // Total de visitas
+    $total_visitas = Visita::count();
     
-        // Total de alumnos y maestros
-        $total_alumnos = Alumno::count();
-        $total_maestros = Maestro::count();
+    // Total de alumnos y maestros
+    $total_alumnos = Alumno::count();
+    $total_maestros = Maestro::count();
     
-        // Visitas por servicio
-        $visitas_acervo = Visita::where('servicio', 'acervo')->count();
-        $visitas_computo = Visita::where('servicio', 'computo')->count();
-        $prestamos_externos = Visita::where('servicio', 'prestamo')->count();
+    // Visitas por servicio
+    $visitas_acervo = Visita::where('servicio', 'acervo')->count();
+    $visitas_computo = Visita::where('servicio', 'computo')->count();
+    $prestamos_externos = Visita::where('servicio', 'prestamo')->count();
     
-        // Carrera con más visitas
-        $carrera_mas_visitas = Alumno::join('visitas', 'alumnos.id', '=', 'visitas.usuario_id')
-            ->select('alumnos.carrera')
-            ->groupBy('alumnos.carrera')
-            ->orderByRaw('COUNT(visitas.id) DESC')
-            ->limit(1)
-            ->pluck('carrera')
-            ->first();
-    
-        // Reporte detallado por carrera, tipo de usuario y sexo
-        $datos_carreras = Alumno::select('carrera', 'tipo_usuario', 'sexo', DB::raw('COUNT(*) as cantidad'))
-            ->join('visitas', 'alumnos.id', '=', 'visitas.usuario_id')
-            ->groupBy('carrera', 'tipo_usuario', 'sexo')
-            ->get()
-            ->groupBy('carrera');
-    
-        // Renderizar la vista con los datos
-        return view('visitas.index', [
-            'total_visitas' => $total_visitas,
-            'total_alumnos' => $total_alumnos,
-            'total_maestros' => $total_maestros,
-            'visitas_acervo' => $visitas_acervo,
-            'visitas_computo' => $visitas_computo,
-            'prestamos_externos' => $prestamos_externos,
-            'carrera_mas_visitas' => $carrera_mas_visitas ?? 'N/A',
-            'datos_carreras' => $datos_carreras,
-        ]);
-    }
+    // Carrera con más visitas (por alumnos)
+    $carrera_mas_visitas = Alumno::join('visitas', 'alumnos.id', '=', 'visitas.usuario_id')
+        ->select('alumnos.carrera')
+        ->groupBy('alumnos.carrera')
+        ->orderByRaw('COUNT(visitas.id) DESC')
+        ->limit(1)
+        ->pluck('carrera')
+        ->first();
+
+    // Reporte detallado por carrera, tipo de usuario y sexo (alumnos)
+    $datos_carreras = Alumno::select('alumnos.carrera', 'alumnos.tipo_usuario', 'alumnos.sexo', DB::raw('COUNT(*) as cantidad'))
+    ->join('visitas', 'alumnos.id', '=', 'visitas.usuario_id')
+    ->groupBy('alumnos.carrera', 'alumnos.tipo_usuario', 'alumnos.sexo')
+    ->get()
+    ->groupBy('alumnos.carrera');
+
+
+    // Reporte detallado por carrera, grado, grupo, y sexo (alumnos)
+    $detalles_carreras_grado_grupo = Alumno::select('alumnos.carrera', 'alumnos.grado', 'alumnos.grupo', 'alumnos.sexo', DB::raw('COUNT(*) as cantidad'))
+    ->join('visitas', 'alumnos.id', '=', 'visitas.usuario_id')
+    ->groupBy('alumnos.carrera', 'alumnos.grado', 'alumnos.grupo', 'alumnos.sexo')
+    ->get()
+    ->groupBy(function($item) {
+        return $item->carrera . ' - ' . $item->grado . ' - ' . $item->grupo;
+    });
+
+
+    // Cantidad de hombres y mujeres por servicio
+    $cantidad_hombres_por_servicio = Visita::where('sexo', 'masculino')
+        ->select('servicio', DB::raw('COUNT(*) as cantidad'))
+        ->groupBy('servicio')
+        ->get();
+
+    $cantidad_mujeres_por_servicio = Visita::where('sexo', 'femenino')
+        ->select('servicio', DB::raw('COUNT(*) as cantidad'))
+        ->groupBy('servicio')
+        ->get();
+
+    // Obtener la información del último usuario que visitó
+    $ultimo_usuario = Visita::orderBy('created_at', 'desc')
+        ->with(['alumno', 'maestro']) // Asumiendo que existe la relación con Alumno y Maestro
+        ->first();
+
+    // Renderizar la vista con los datos
+    return view('visitas.index', [
+        'total_visitas' => $total_visitas,
+        'total_alumnos' => $total_alumnos,
+        'total_maestros' => $total_maestros,
+        'visitas_acervo' => $visitas_acervo,
+        'visitas_computo' => $visitas_computo,
+        'prestamos_externos' => $prestamos_externos,
+        'carrera_mas_visitas' => $carrera_mas_visitas ?? 'N/A',
+        'datos_carreras' => $datos_carreras,
+        'detalles_carreras_grado_grupo' => $detalles_carreras_grado_grupo,
+        'cantidad_hombres_por_servicio' => $cantidad_hombres_por_servicio,
+        'cantidad_mujeres_por_servicio' => $cantidad_mujeres_por_servicio,
+        'ultimo_usuario' => $ultimo_usuario,
+    ]);
+
+    $visitas_diarias = Visita::whereDate('created_at', Carbon::today())->count();
+    $visitas_semanales = Visita::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+    $visitas_mensuales = Visita::whereMonth('created_at', Carbon::now()->month)->count();
+    $usuarios_frecuentes = Visita::select('usuario_id', DB::raw('COUNT(*) as cantidad'))
+        ->groupBy('usuario_id')
+        ->orderBy('cantidad', 'desc')
+        ->limit(5) // Puedes ajustar el límite a lo que necesites
+        ->get();
+
+
+    $promedio_visitas = Visita::count() / Visita::distinct('usuario_id')->count();
+
+    $tendencias_servicios = Visita::select(DB::raw('DATE(created_at) as fecha'), 'servicio', DB::raw('COUNT(*) as cantidad'))
+    ->groupBy(DB::raw('DATE(created_at)'), 'servicio')
+    ->orderBy('fecha')
+    ->get();
+
+    $total_servicios = Visita::count();
+    $porcentaje_acervo = ($visitas_acervo / $total_servicios) * 100;
+$porcentaje_computo = ($visitas_computo / $total_servicios) * 100;
+$porcentaje_prestamo = ($prestamos_externos / $total_servicios) * 100;
+
+
+}
 
     /**
      * Show the form for creating a new resource.
@@ -192,6 +247,7 @@ public function store_maestro(Request $request)
         'grado' => 'required|string',
         'grupo' => 'required|string',
         'turno' => 'required|string',
+        'tipo_usuario' => 'required|string',
         'sexo' => 'required|string|in:masculino,femenino,otro',
     ]);
 
@@ -216,6 +272,7 @@ public function store_maestro(Request $request)
         'sexo' => $validated['sexo'], // Del formulario
         'turno' => $validated['turno'], // Del formulario
         'grado' => $validated['grado'], // Del formulario
+        'tipo_usuario' => $validated['tipo_usuario'], // Del formulario
         'fecha' => now(),
     ]);
 

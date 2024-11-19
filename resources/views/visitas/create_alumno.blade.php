@@ -1,4 +1,5 @@
 @extends('adminlte::page')
+@section('title', 'Registro de Visitas de estudiante')
 
 @section('content')
 

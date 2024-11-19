@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('title', 'Registro de Visitas de Docente')
+
 @section('content')
 
 <div class="container">
@@ -37,6 +39,15 @@
                 <label for="numero_empleado" style="color: #2E8B57;">Número de Empleado:</label>
                 <input type="text" id="numero_empleado" name="numero_empleado" required class="form-control">
             </div>
+
+            <div class="form-group">
+                <label for="tipo_usuario" style="color: #2E8B57;">Tipo de usuario:</label>
+                <select name="tipo_usuario" id="tipo_usuario" class="form-control border border-success" required>
+                    <option value="Estudiante">Estudiante</option>
+                    <option value="Docente">Docente</option>
+                </select>
+            </div>
+            
 
             <!-- Servicio -->
             <div class="form-group">

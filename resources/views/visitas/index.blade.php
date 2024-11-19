@@ -1,126 +1,163 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Registro de Visitas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 30px;
-            background-color: #ffffff;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        h3 {
-            margin-top: 30px;
-            color: #007bff;
-        }
-        hr {
-            border: 1px solid #007bff;
-            margin-bottom: 20px;
-        }
-        .metrics {
-            padding: 20px;
-            background-color: #e9f7fd;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .metrics p {
-            font-size: 18px;
-            margin: 5px 0;
-        }
-        .detailed-report {
-            margin-top: 20px;
-        }
-        .detailed-report table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        .detailed-report th, .detailed-report td {
-            border: 1px solid #dee2e6;
-            padding: 10px;
-            text-align: left;
-        }
-        .detailed-report th {
-            background-color: #f1f1f1;
-            font-weight: bold;
-            color: #333;
-        }
-        .detailed-report tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        .detailed-report tr:hover {
-            background-color: #d1ecf1;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 14px;
-            color: #777;
-        }
-    </style>
-</head>
-<body>
+@extends('adminlte::page')
+@section('title', 'Metricas Generales')
 
+@section('content')
     <div class="container">
-        <h2>Registro de Visitas</h2>
-        <hr>
-        <div class="metrics">
-            <h3>Métricas Mensuales</h3>
-            <p><strong>Total de Visitas:</strong> <span style="color: #28a745;">{{ $total_visitas }}</span></p>
-            <p><strong>Total de Alumnos:</strong> <span style="color: #28a745;">{{ $total_alumnos }}</span></p>
-            <p><strong>Total de Maestros:</strong> <span style="color: #28a745;">{{ $total_maestros }}</span></p>
-            <p><strong>Visitas a Acervo:</strong> <span style="color: #28a745;">{{ $visitas_acervo }}</span></p>
-            <p><strong>Visitas a Computo:</strong> <span style="color: #28a745;">{{ $visitas_computo }}</span></p>
-            <p><strong>Total de Préstamos Externos:</strong> <span style="color: #28a745;">{{ $prestamos_externos }}</span></p>
-            <p><strong>Carrera que Más Visita:</strong> <span style="color: #28a745;">{{ $carrera_mas_visitas }}</span></p>
-        </div>
+        <h1 class="text-center mb-4">Métricas de Visitas</h1>
 
-        <div class="detailed-report">
-            <h3>Reporte Detallado por Carrera, Tipo de Usuario y Sexo</h3>
-            <table>
+        <!-- Sección de Visitas Generales -->
+        <h3>Visitas Generales</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total de Visitas</td>
+                    <td>{{ $total_visitas }}</td>
+                </tr>
+                <tr>
+                    <td>Visitas por Servicio</td>
+                    <td>Acervo: {{ $visitas_acervo }}, Cómputo: {{ $visitas_computo }}, Préstamos: {{ $prestamos_externos }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Sección de Usuarios -->
+        <h3>Usuarios</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total de Alumnos</td>
+                    <td>{{ $total_alumnos }}</td>
+                </tr>
+                <tr>
+                    <td>Total de Maestros</td>
+                    <td>{{ $total_maestros }}</td>
+                </tr>
+                <tr>
+                    <td>Carrera con más Visitas</td>
+                    <td>{{ $carrera_mas_visitas }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Sección de Detalles por Carrera y Sexo -->
+        <h3>Reporte Detallado por Carrera y Sexo</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Carrera</th>
+                    <th>Sexo</th>
+                    <th>Tipo de Usuario</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($datos_carreras as $carrera => $grupo)
+                    <tr>
+                        <td colspan="4"><strong>{{ $carrera }}</strong></td>
+                    </tr>
+                    @foreach ($grupo as $item)
+                        <tr>
+                            <td></td>
+                            <td>{{ $item->sexo }}</td>
+                            <td>{{ $item->tipo_usuario }}</td>
+                            <td>{{ $item->cantidad }}</td>
+                        </tr>
+                    @endforeach
+                @endforeach
+            </tbody>
+        </table>
+
+        <!-- Sección de Detalles por Carrera, Grado, Grupo y Sexo -->
+        <h3>Reporte Detallado por Carrera, Grado, Grupo y Sexo</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Carrera</th>
+                    <th>Grado</th>
+                    <th>Grupo</th>
+                    <th>Sexo</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($detalles_carreras_grado_grupo as $key => $grupo)
+                    <tr>
+                        <td colspan="5"><strong>{{ $key }}</strong></td>
+                    </tr>
+                    @foreach ($grupo as $item)
+                        <tr>
+                            <td></td>
+                            <td>{{ $item->grado }}</td>
+                            <td>{{ $item->grupo }}</td>
+                            <td>{{ $item->sexo }}</td>
+                            <td>{{ $item->cantidad }}</td>
+                        </tr>
+                    @endforeach
+                @endforeach
+            </tbody>
+        </table>
+
+        <!-- Sección de Usuarios por Servicio -->
+        <h3>Usuarios por Servicio</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Servicio</th>
+                    <th>Cantidad de Hombres</th>
+                    <th>Cantidad de Mujeres</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($cantidad_hombres_por_servicio as $servicio)
+                    <tr>
+                        <td>{{ $servicio->servicio }}</td>
+                        <td>{{ $servicio->cantidad_hombres }}</td>
+                        <td>{{ $servicio->cantidad_mujeres }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <!-- Sección de Última Visita -->
+        <h3>Última Visita</h3>
+        @if ($ultimo_usuario)
+            <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Carrera</th>
-                        <th>Tipo de Usuario</th>
-                        <th>Sexo</th>
-                        <th>Cantidad</th>
+                        <th>Descripción</th>
+                        <th>Valor</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($datos_carreras as $carrera => $items)
-                        @foreach($items as $item)
-                            <tr>
-                                <td>{{ $carrera }}</td>
-                                <td>{{ ucfirst($item->tipo_usuario) }}</td>
-                                <td>{{ ucfirst($item->sexo) }}</td>
-                                <td>{{ $item->cantidad }}</td>
-                            </tr>
-                        @endforeach
-                    @endforeach
+                    <tr>
+                        <td>Último Usuario</td>
+                        <td>{{ $ultimo_usuario->alumno->nombre ?? $ultimo_usuario->maestro->nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td>Servicio</td>
+                        <td>{{ $ultimo_usuario->servicio }}</td>
+                    </tr>
+                    <tr>
+                        <td>Fecha y Hora</td>
+                        <td>{{ $ultimo_usuario->created_at }}</td>
+                    </tr>
                 </tbody>
             </table>
-        </div>
+        @else
+            <p>No se han registrado visitas aún.</p>
+        @endif
 
-        <div class="footer">
-            <p>&copy; {{ date('Y') }} Registro de Visitas. Todos los derechos reservados.</p>
-        </div>
     </div>
-
-</body>
-</html>
+@endsection
