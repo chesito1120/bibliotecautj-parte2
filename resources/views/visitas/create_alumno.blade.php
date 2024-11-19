@@ -49,9 +49,9 @@
                     <label for="servicio" style="color: #2E8B57;">Servicio:</label>
                     <select id="servicio" name="servicio" class="form-control" required>
                         <option value="" selected disabled>Seleccione un servicio</option>
-                        <option value="Computo">Cómputo</option>
-                        <option value="Acervo">Acervo</option>
-                        <option value="Prestamo">Préstamo</option>
+                        <option value="computo">Cómputo</option>
+                        <option value="acervo">Acervo</option>
+                        <option value="prestamo">Préstamo</option>
                     </select>
                 </div>
 

@@ -103,8 +103,8 @@
             <div class="form-group">
                 <label for="sexo" style="color: #2E8B57;">Sexo:</label>
                 <select name="sexo" id="sexo" class="form-control border border-success" required>
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
+                    <option value="masculino">Hombre</option>
+                    <option value="femenino">Mujer</option>
                 </select>
             </div>
 
