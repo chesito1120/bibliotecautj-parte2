@@ -11,15 +11,26 @@ use App\Imports\AlumnosImport;
 use App\Imports\MaestrosImport;
 use App\Models\Alumno;  
 use App\Models\Maestro;  
+use App\Models\Visita;  
 
 // Rutas para el controlador de visitas
 Route::get('/visitas', [VisitaController::class, 'index'])->name('visitas.index');
-Route::get('/', [VisitaController::class, 'create'])->name('visitas.create');
+//Route::get('/', [VisitaController::class, 'create'])->name('visitas.create');
 Route::post('/visitas', [VisitaController::class, 'store'])->name('visitas.store');
-Route::get('/visitas/{id}', [VisitaController::class, 'show'])->name('visitas.show');
+//Route::get('/visitas/{id}', [VisitaController::class, 'show'])->name('visitas.show');
 Route::get('/visitas/{id}/edit', [VisitaController::class, 'edit'])->name('visitas.edit');
 Route::put('/visitas/{id}', [VisitaController::class, 'update'])->name('visitas.update');
 Route::delete('/visitas/{id}', [VisitaController::class, 'destroy'])->name('visitas.destroy');
+Route::get('/alumnos/carrera/{matricula}', [VisitaController::class, 'getCarreraPorMatricula']);
+
+
+// Rutas para visitas
+Route::get('/visitas/mcreate', [VisitaController::class, 'mCreate'])->name('visitas.mcreate'); // Para maestros
+Route::get('/visitas/acreate', [VisitaController::class, 'aCreate'])->name('visitas.acreate'); // Para alumnos
+Route::post('/visitas/store', [VisitaController::class, 'store'])->name('visitas.store');
+Route::post('/visitas/store_maestro', [VisitaController::class, 'store_maestro'])->name('visitas.store_maestro');
+Route::get('/maestros/datos/{numero_empleado}', [MaestroController::class, 'obtenerDatos']);
+
 
 // Rutas para el controlador de usuarios
 Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios.index'); // Muestra todos los usuarios
@@ -50,6 +61,16 @@ Route::post('/maestros', [MaestroController::class, 'store'])->name('maestro.sto
 // Rutas para subir CSV de libros
 Route::get('libros/upload', [LibroController::class, 'showUploadForm'])->name('libros.upload.form');
 Route::post('libros/upload', [LibroController::class, 'uploadCSV'])->name('libros.upload');
+
+
+
+Route::get('/visitas/alumnos', [VisitaController::class, 'createAlumnos'])->name('visitas.alumnos.create');
+Route::post('/visitas/alumnos', [VisitaController::class, 'storeAlumnos'])->name('visitas.alumnos.store');
+
+Route::get('/visitas/maestros', [VisitaController::class, 'createMaestros'])->name('visitas.maestros.create');
+Route::post('/visitas/maestros', [VisitaController::class, 'storeMaestros'])->name('visitas.maestros.store');
+
+
 
 // CRUD libros
 Route::get('/libros', [LibroController::class, 'index'])->name('libros.index');

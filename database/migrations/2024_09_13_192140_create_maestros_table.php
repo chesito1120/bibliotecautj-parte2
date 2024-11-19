@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('turno');
             $table->string('sexo');
             $table->string('puesto');
+            $table->string('actividad')->nullable();
             $table->string('tipo_usuario')->default('Docente'); 
+            
             $table->timestamps();
         });
     }

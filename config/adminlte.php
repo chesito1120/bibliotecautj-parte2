@@ -316,17 +316,7 @@ return [
             'can' => 'manage-blog',
         ],
        
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
+        
         [
             'text' => 'Acciones',
             'icon' => 'fas fa-fw fa-share',
@@ -423,6 +413,19 @@ return [
             'text' => 'listado de libros',
             'icon_color' => 'cyan',
             'url' => 'http://127.0.0.1:8000/libros/',
+        ],
+
+        [
+            'text' => 'Registro de Docentes',
+            'icon_color' => 'with',
+            'url' => 'http://127.0.0.1:8000/visitas/mcreate',
+        ],
+
+
+        [
+            'text' => 'Registro de Estudiantes',
+            'icon_color' => 'with',
+            'url' => 'http://127.0.0.1:8000/visitas/acreate',
         ],
 
 

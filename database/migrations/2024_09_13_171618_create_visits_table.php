@@ -6,40 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        // Tabla de usuarios (alumnos y maestros)
-        Schema::create('usuarios', function (Blueprint $table) {
-            $table->id();
-            $table->string('matricula', 20)->unique();
-            $table->string('nombre');
-            $table->enum('tipo_usuario', ['alumno', 'maestro']);
-            $table->enum('sexo', ['masculino', 'femenino']);
-            $table->string('carrera')->nullable();
-            $table->enum('turno', ['matutino', 'vespertino'])->nullable();
-            $table->timestamps();
-        });
-
-        // Tabla de visitas 
         Schema::create('visitas', function (Blueprint $table) {
             $table->id();
-            // Relación con la tabla de usuarios
-            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
+            $table->unsignedBigInteger('usuario_id');  // Relaciona con el alumno o maestro
+            $table->enum('tipo_usuario', ['Estudiante', 'Docente']);
+            $table->string('nombre_completo')->default('Desconocido'); 
+            $table->string('matricula')->nullable(); // Para alumnos
+            $table->string('numero_empleado')->nullable(); // Para maestros
+            $table->string('carrera'); // Unificado
+            $table->string('turno');
+            $table->string('grupo')->nullable();
+            $table->string('grado')->nullable();
+            $table->string('actividad')->nullable();
+            $table->integer('cantidad_hombres')->nullable(); // Si aplica para el maestro
+            $table->integer('cantidad_mujeres')->nullable(); // Si aplica para el maestro
+            $table->string('sexo')->nullable();
             $table->enum('servicio', ['computo', 'acervo', 'prestamo']);
-            $table->timestamp('fecha')->useCurrent();
+            
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('visitas');
-        Schema::dropIfExists('usuarios');
     }
 };

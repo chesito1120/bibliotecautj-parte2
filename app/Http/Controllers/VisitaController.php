@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Visita;
-use App\Models\Carrera; 
+use App\Models\Alumno;
+use App\Models\Maestro;
 
 class VisitaController extends Controller
 {
@@ -14,41 +16,29 @@ class VisitaController extends Controller
     public function index()
     {
         // Total de visitas
-        $total_visitas = DB::table('visitas')->count();
+        $total_visitas = Visita::count();
     
         // Total de alumnos y maestros
-        $total_alumnos = DB::table('usuarios')
-            ->where('tipo_usuario', 'alumno')
-            ->count();
-        $total_maestros = DB::table('usuarios')
-            ->where('tipo_usuario', 'maestro')
-            ->count();
+        $total_alumnos = Alumno::count();
+        $total_maestros = Maestro::count();
     
         // Visitas por servicio
-        $visitas_acervo = DB::table('visitas')
-            ->where('servicio', 'acervo')
-            ->count();
-        $visitas_computo = DB::table('visitas')
-            ->where('servicio', 'computo')
-            ->count();
-        $prestamos_externos = DB::table('visitas')
-            ->where('servicio', 'prestamo')
-            ->count();
+        $visitas_acervo = Visita::where('servicio', 'acervo')->count();
+        $visitas_computo = Visita::where('servicio', 'computo')->count();
+        $prestamos_externos = Visita::where('servicio', 'prestamo')->count();
     
         // Carrera con más visitas
-        $carrera_mas_visitas = DB::table('usuarios')
-            ->join('visitas', 'usuarios.id', '=', 'visitas.usuario_id')
-            ->select('usuarios.carrera')
-            ->groupBy('usuarios.carrera')
+        $carrera_mas_visitas = Alumno::join('visitas', 'alumnos.id', '=', 'visitas.usuario_id')
+            ->select('alumnos.carrera')
+            ->groupBy('alumnos.carrera')
             ->orderByRaw('COUNT(visitas.id) DESC')
             ->limit(1)
             ->pluck('carrera')
             ->first();
     
         // Reporte detallado por carrera, tipo de usuario y sexo
-        $datos_carreras = DB::table('usuarios')
-            ->select('carrera', 'tipo_usuario', 'sexo', DB::raw('COUNT(*) as cantidad'))
-            ->join('visitas', 'usuarios.id', '=', 'visitas.usuario_id')
+        $datos_carreras = Alumno::select('carrera', 'tipo_usuario', 'sexo', DB::raw('COUNT(*) as cantidad'))
+            ->join('visitas', 'alumnos.id', '=', 'visitas.usuario_id')
             ->groupBy('carrera', 'tipo_usuario', 'sexo')
             ->get()
             ->groupBy('carrera');
@@ -65,18 +55,32 @@ class VisitaController extends Controller
             'datos_carreras' => $datos_carreras,
         ]);
     }
-    
-
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-{
-    // Obtener las carreras desde la tabla 'usuarios'
-    $carreras = DB::table('usuarios')->select('carrera')->distinct()->get();
+    {
+        // Obtener las carreras desde los alumnos y maestros
+        $carreras = Alumno::select('carrera')->distinct()->get();
 
-    return view('visitas.create', compact('carreras'));
+        return view('visitas.create', compact('carreras'));
+    }
+
+    public function mCreate()
+{
+    // Obtener las carreras desde los maestros
+    $carreras = Maestro::select('carrera_ads')->distinct()->get();
+
+    return view('visitas.create_maestro', compact('carreras'));
+}
+
+public function aCreate()
+{
+    // Obtener las carreras desde los alumnos
+    $carreras = Alumno::select('carrera')->distinct()->get();
+
+    return view('visitas.create_alumno', compact('carreras'));
 }
 
     /**
@@ -84,79 +88,152 @@ class VisitaController extends Controller
      */
     public function store(Request $request)
 {
-
-    $validatedData = $request->validate([
-        'servicio' => 'required',
-        'nombre' => 'required_if:servicio,prestamo',
-        'sexo' => 'required_if:servicio,prestamo',
-        'grado' => 'required_if:servicio,prestamo',
-        'fecha_prestamo' => 'required_if:servicio,prestamo',
-        'tipo_usuario' => 'required_if:servicio,prestamo',
-        'carrera' => 'required_if:servicio,prestamo',
-        'titulo_libro' => 'required_if:servicio,prestamo',
-        'autor' => 'required_if:servicio,prestamo',
-        'no_clasificacion' => 'required_if:servicio,prestamo',
-        'renovacion' => 'required_if:servicio,prestamo',
-        'fecha_renovacion' => 'nullable|date',
-    ]);
-    
+    // Validación de los datos
     $validated = $request->validate([
         'matricula' => 'required|string',
         'servicio' => 'required|in:computo,acervo,prestamo',
+        'numero_empleado' => 'nullable|string', // También puede estar vacío
     ]);
 
-    $usuario = DB::table('usuarios')->where('matricula', $validated['matricula'])->first();
+    $usuario = null;
 
-    if (!$usuario) {
-        return redirect()->route('usuarios.create')->with('alerta', 'Usuario no registrado, por favor complete el registro.');
+    // Si es alumno, buscar en la tabla de alumnos
+    if ($validated['matricula']) {
+        $usuario = Alumno::where('matricula', $validated['matricula'])->first();
     }
 
-    // Guardar visita
-    DB::table('visitas')->insert([
+    // Si no es alumno, buscar en la tabla de maestros
+    if (!$usuario && $validated['numero_empleado']) {
+        $usuario = Maestro::where('numero_empleado', $validated['numero_empleado'])->first();
+    }
+
+    if (!$usuario) {
+        return redirect()->back()->with('error', 'Usuario no encontrado.');
+    }
+
+    // Obtener los datos del usuario para guardar la visita
+    $nombre_completo = $usuario->nombre;
+    $carrera = $usuario->carrera;
+    $turno = $usuario->turno;
+    $matricula = $usuario->matricula;
+    $numero_empleado = $usuario->numero_empleado;
+    $grupo = $usuario->grupo;
+    $actividad = $usuario->actividad;
+    $cantidad_hombres = $usuario->cantidad_hombres;
+    $cantidad_mujeres = $usuario->cantidad_mujeres;
+    $sexo = $usuario->sexo;
+    $grado = $usuario->grado;
+
+    // Guardar la visita
+    Visita::create([
         'usuario_id' => $usuario->id,
         'servicio' => $validated['servicio'],
+        'nombre_completo' => $nombre_completo,
+        'carrera' => $carrera,
+        'matricula' => $matricula,
+        'numero_empleado' => $numero_empleado,
+        'grupo' => $grupo,
+        'actividad' => $actividad,
+        'cantidad_hombres' => $cantidad_hombres,
+        'cantidad_mujeres' => $cantidad_mujeres,
+        'sexo' => $sexo,
+        'turno' => $turno,
+        'grado' => $grado,
         'fecha' => now(),
     ]);
 
-    return redirect()->route('visitas.index')->with('success', 'Visita registrada exitosamente.');
+    return redirect()->route('visitas.acreate')->with('success', 'Visita registrada exitosamente.');
+}
+public function store_maestro1(Request $request)
+{
+    // Validación de los datos del formulario
+    $validated = $request->validate([
+        'numero_empleado' => 'required|string|max:255',
+        'servicio' => 'required|string|max:255',
+        'actividad' => 'required|string|max:255',
+        'cantidad_hombres' => 'required|integer',
+        'cantidad_mujeres' => 'required|integer',
+        'carrera_ads' => 'required|string|max:255',
+        'grado' => 'required|string|max:255',
+        'grupo' => 'required|string|max:255',
+        'turno' => 'required|string|max:255',
+        'sexo' => 'required|string|max:255',
+    ]);
+
+    // Crear un nuevo registro de visita para maestro
+    Visita::create([
+        'numero_empleado' => $validated['numero_empleado'],
+        'servicio' => $validated['servicio'],
+        'actividad' => $validated['actividad'],
+        'cantidad_hombres' => $validated['cantidad_hombres'],
+        'cantidad_mujeres' => $validated['cantidad_mujeres'],
+        'carrera_ads' => $validated['carrera'],
+        'grado' => $validated['grado'],
+        'grupo' => $validated['grupo'],
+        'turno' => $validated['turno'],
+        'sexo' => $validated['sexo'],
+    ]);
+
+    // Redirigir o devolver respuesta
+    return redirect()->route('visitas.index')->with('success', 'Visita registrada correctamente');
 }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+
+public function store_maestro(Request $request)
+{
+    // Validación de los datos
+    $validated = $request->validate([
+        'numero_empleado' => 'required|string', // Número de empleado es obligatorio
+        'servicio' => 'required|in:computo,acervo,prestamo', // Servicios válidos
+        'actividad' => 'required|string',
+        'cantidad_hombres' => 'required|integer',
+        'cantidad_mujeres' => 'required|integer',
+        'carrera' => 'required|string',
+        'grado' => 'required|string',
+        'grupo' => 'required|string',
+        'turno' => 'required|string',
+        'sexo' => 'required|string|in:masculino,femenino,otro',
+    ]);
+
+    // Verificar que el maestro existe en la base de datos
+    $usuario = Maestro::where('numero_empleado', $validated['numero_empleado'])->first();
+
+    if (!$usuario) {
+        return redirect()->back()->with('error', 'Maestro no encontrado.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    // Guardar la visita usando los datos del formulario
+    Visita::create([
+        'usuario_id' => $usuario->id, // ID del maestro
+        'servicio' => $validated['servicio'],
+        'nombre_completo' => $usuario->nombre,
+        'carrera' => $validated['carrera'], // Se toma del formulario
+        'numero_empleado' => $usuario->numero_empleado,
+        'grupo' => $validated['grupo'], // Del formulario
+        'actividad' => $validated['actividad'], // Del formulario
+        'cantidad_hombres' => $validated['cantidad_hombres'], // Del formulario
+        'cantidad_mujeres' => $validated['cantidad_mujeres'], // Del formulario
+        'sexo' => $validated['sexo'], // Del formulario
+        'turno' => $validated['turno'], // Del formulario
+        'grado' => $validated['grado'], // Del formulario
+        'fecha' => now(),
+    ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    // Redirigir con un mensaje de éxito
+    return redirect()->route('visitas.mcreate')->with('success', 'Visita registrada exitosamente.');
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 
-    public static function buscar($query)
-    {
-        return Libro::where('titulo', 'like', "%{$query}%")
-                    ->orWhere('autor', 'like', "%{$query}%")
-                    ->get(); // Devuelve los resultados de búsqueda
+public function getCarreraPorMatricula($matricula)
+{
+    $alumno = Alumno::where('matricula', $matricula)->first();
+
+    if ($alumno) {
+        return response()->json([
+            'success' => true,
+            'carrera' => $alumno->carrera,
+        ]);
     }
+}
+
 }
