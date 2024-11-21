@@ -11,14 +11,19 @@ class CreatePrestamosTable extends Migration
         Schema::create('prestamos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('libro_id');
-            $table->unsignedBigInteger('alumno_id');
+            $table->string('matricula');
+            $table->string('nombre');
+            $table->string('grado');
+            $table->string('grupo');
+            $table->string('carrera');
+            $table->string('isbn');
+            $table->string('clas_dewey');
             $table->date('fecha_prestamo');
             $table->date('fecha_devolucion')->nullable();
             $table->timestamps();
 
             // Claves foráneas
             $table->foreign('libro_id')->references('id')->on('libros')->onDelete('cascade');
-            $table->foreign('alumno_id')->references('id')->on('alumnos')->onDelete('cascade');
         });
     }
 

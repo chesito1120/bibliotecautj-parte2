@@ -11,6 +11,8 @@ use App\Imports\AlumnosImport;
 use App\Imports\MaestrosImport;
 use App\Models\Alumno;  
 use App\Models\Maestro;  
+use App\Http\Controllers\PrestamoController;
+
 
 // Rutas para el controlador de visitas
 Route::get('/visitas', [VisitaController::class, 'index'])->name('visitas.index');
@@ -82,3 +84,17 @@ Route::get('/visitas/usuario/{matricula}', function ($matricula) {
     // Retornar los datos del usuario (ya sea alumno o maestro)
     return response()->json($usuario);
 });
+
+// Route::get('/visitas/usuario/{matricula}', [VisitaController::class, 'showUserVisits'])->name('visitas.showUserVisits');
+
+Route::get('visitas/buscar', [VisitaController::class, 'buscar'])->name('visitas.buscar');
+Route::resource('visitas', VisitaController::class);
+
+Route::get('/buscar-libros', [VisitaController::class, 'buscar'])->name('visitas.buscar');
+Route::post('/guardar-prestamo', [VisitaController::class, 'buscar'])->name('visitas.prestamo_libro');
+Route::get('/guardar-prestamo', [VisitaController::class, 'buscar'])->name('visitas.prestamo_libro');
+
+Route::post('/prestamo/store', [PrestamoController::class, 'store'])->name('prestamo.store');
+
+Route::get('/prestamos', [PrestamoController::class, 'index'])->name('prestamo.index');
+Route::put('/prestamos/{prestamo}/devolver', [PrestamoController::class, 'registrarDevolucion'])->name('prestamo.devolver');

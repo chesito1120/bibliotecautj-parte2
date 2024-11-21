@@ -162,17 +162,17 @@ class LibroController extends Controller
     // Método para realizar la búsqueda de libros
     public function buscar(Request $request)
     {
-        $query = $request->input('query');
-        \Log::info("Buscando libros con la consulta: " . $query); // Log para depuración
-
-        $libros = Libro::buscar($query);
-
-        if ($libros->isEmpty()) {
-            return response()->json(['message' => 'No se encontraron libros'], 404);
-        }
+        $query = $request->get('query');
+        $libros = DB::table('libros')
+            ->where('titulo', 'LIKE', "%{$query}%")
+            ->orWhere('autor', 'LIKE', "%{$query}%")
+            ->orWhere('clas_dewey', 'LIKE', "%{$query}%")
+            ->limit(10)
+            ->get();
 
         return response()->json($libros);
     }
+
 
 
 }
