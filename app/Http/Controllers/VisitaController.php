@@ -85,30 +85,6 @@ class VisitaController extends Controller
         'cantidad_mujeres_por_servicio' => $cantidad_mujeres_por_servicio,
         'ultimo_usuario' => $ultimo_usuario,
     ]);
-
-    $visitas_diarias = Visita::whereDate('created_at', Carbon::today())->count();
-    $visitas_semanales = Visita::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
-    $visitas_mensuales = Visita::whereMonth('created_at', Carbon::now()->month)->count();
-    $usuarios_frecuentes = Visita::select('usuario_id', DB::raw('COUNT(*) as cantidad'))
-        ->groupBy('usuario_id')
-        ->orderBy('cantidad', 'desc')
-        ->limit(5) // Puedes ajustar el límite a lo que necesites
-        ->get();
-
-
-    $promedio_visitas = Visita::count() / Visita::distinct('usuario_id')->count();
-
-    $tendencias_servicios = Visita::select(DB::raw('DATE(created_at) as fecha'), 'servicio', DB::raw('COUNT(*) as cantidad'))
-    ->groupBy(DB::raw('DATE(created_at)'), 'servicio')
-    ->orderBy('fecha')
-    ->get();
-
-    $total_servicios = Visita::count();
-    $porcentaje_acervo = ($visitas_acervo / $total_servicios) * 100;
-$porcentaje_computo = ($visitas_computo / $total_servicios) * 100;
-$porcentaje_prestamo = ($prestamos_externos / $total_servicios) * 100;
-
-
 }
 
     /**
