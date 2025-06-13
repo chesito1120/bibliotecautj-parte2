@@ -16,3 +16,13 @@ Route::delete('/visitas/{id}', [VisitaController::class, 'destroy'])->name('visi
 // Rutas para el controlador de usuarios
 Route::get('/usuarios/create', [UsuariosController::class, 'create'])->name('usuarios.create');
 Route::post('/usuarios/store', [UsuariosController::class, 'store'])->name('usuarios.store');
+
+use App\Http\Controllers\PsicologoController;
+use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\CitaController;
+use App\Http\Controllers\DiagnosticoController;
+
+Route::resource('psicologos', PsicologoController::class);
+Route::resource('pacientes', PacienteController::class);
+Route::resource('citas', CitaController::class);
+Route::resource('diagnosticos', DiagnosticoController::class);
